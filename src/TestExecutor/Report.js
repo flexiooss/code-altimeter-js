@@ -9,32 +9,32 @@ module.exports = class Report {
      *
      * @type {number}
      */
-    this.testSuiteCount = 0
+    this.__testCaseCount = 0
     /**
      *
      * @type {number}
      */
-    this.testSuiteFail = 0
+    this.__testCaseFail = 0
     /**
      *
      * @type {number}
      */
-    this.testSuitePass = 0
+    this.__testCasePass = 0
     /**
      *
      * @type {number}
      */
-    this.testCount = 0
+    this.__testCount = 0
     /**
      *
      * @type {number}
      */
-    this.testFail = 0
+    this.__testFail = 0
     /**
      *
      * @type {number}
      */
-    this.testPass = 0
+    this.__testPass = 0
   }
 
   /**
@@ -42,8 +42,8 @@ module.exports = class Report {
    * @param {number}n
    * @return {module.Report}
    */
-  withTestSuiteCount(n) {
-    this.testSuiteCount = n
+  withTestCaseCount(n) {
+    this.__testCaseCount = n
     return this
   }
 
@@ -52,8 +52,8 @@ module.exports = class Report {
    * @param n
    * @return {module.Report}
    */
-  withTestSuitePass(n) {
-    this.testSuitePass = n
+  withTestCasePass(n) {
+    this.__testCasePass = n
     return this
   }
   /**
@@ -62,7 +62,7 @@ module.exports = class Report {
    * @return {module.Report}
    */
   withTestSuitFail(n) {
-    this.testSuiteFail = n
+    this.__testCaseFail = n
     return this
   }
 
@@ -72,7 +72,7 @@ module.exports = class Report {
    * @return {module.Report}
    */
   withTestCount(n) {
-    this.testCount = n
+    this.__testCount = n
     return this
   }
 
@@ -82,7 +82,7 @@ module.exports = class Report {
    * @return {module.Report}
    */
   withTestPass(n) {
-    this.testPass = n
+    this.__testPass = n
     return this
   }
 
@@ -92,7 +92,7 @@ module.exports = class Report {
    * @return {module.Report}
    */
   withTestFail(n) {
-    this.testFail = n
+    this.__testFail = n
     return this
   }
   /**
@@ -101,7 +101,7 @@ module.exports = class Report {
    * @private
    */
   __hasError() {
-    return this.testFail > 0
+    return this.__testFail > 0
   }
 
   show() {
@@ -113,15 +113,15 @@ module.exports = class Report {
 `)
 
     if (this.__hasError()) {
-      if (this.testSuiteCount > 0) {
-        console.log(`TestSuite Pass : ${this.testSuitePass} / ${this.testSuiteCount} `)
+      if (this.__testCaseCount > 0) {
+        console.log(`TestCase Pass : ${this.__testCasePass} / ${this.__testCaseCount} `)
       }
-      console.log(`Tests Pass : ${this.testPass} / ${this.testCount} `)
+      console.log(`Tests Pass : ${this.__testPass} / ${this.__testCount} `)
 
-      if (this.testSuiteCount > 0) {
-        console.log(`TestSuite Fail : ${this.testSuiteFail} / ${this.testSuiteCount} `)
+      if (this.__testCaseCount > 0) {
+        console.log(`TestCase Fail : ${this.__testCaseFail} / ${this.__testCaseCount} `)
       }
-      console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` Fail : ${this.testFail} / ${this.testCount()} `)
+      console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` Fail : ${this.__testFail} / ${this.__testCount()} `)
       console.log('\x1b[31m%s\x1b[0m', `88888888888888888888888  TEST FAIL  888888888888888888888888   
 888888888888888888888888888888888888888888888888888888888888
 888888888888888888888888888888888888888888888888888888888888
@@ -139,10 +139,10 @@ module.exports = class Report {
 888888888888888888888888888888888888888888888888888888888888`)
       throw new TestError('TEST FAILED')
     } else {
-      if (this.testSuiteCount > 0) {
-        console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` TestSuite Pass : ${this.testSuitePass} / ${this.testSuiteCount} `)
+      if (this.__testCaseCount > 0) {
+        console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` TestCase Pass : ${this.__testCasePass} / ${this.__testCaseCount} `)
       }
-      console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` Tests Pass : ${this.testPass} / ${this.testCount} `)
+      console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` Tests Pass : ${this.__testPass} / ${this.__testCount} `)
       console.log('\x1b[92m%s\x1b[0m', `
            |
         __| |__ 

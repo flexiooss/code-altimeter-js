@@ -23,4 +23,12 @@ module.exports = class TestSuite {
     this.__test.push(test)
     return this
   }
+
+  /**
+   *
+   * @return {number}
+   */
+  countOfTestCase() {
+    return this.__test.length
+  }
 }

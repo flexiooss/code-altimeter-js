@@ -2,6 +2,7 @@ const TestError = require('../TestError')
 const {TEST_METHOD_PREFIX} = require('../constantes')
 const VERBOSE = process.env.TEST_VERBOSE === 1
 const TestCaseExecutor = require('./TestCaseExecutor')
+const Report = require('./Report')
 
 module.exports = class TestSuiteExecutor {
   /**
@@ -102,7 +103,8 @@ Start ${this.__testSuite.constructor.name} `)
    * @private
    */
   __finishTestSuite() {
-
+    new Report()
+      .withTestCaseCount(this.__testSuite.countOfTestCase())
     return this
   }
 }
