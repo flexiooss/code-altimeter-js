@@ -1,45 +1,17 @@
-const TestExecutor = require('./TestExecutor')
+const TestSuiteExecutor = require('./TestExecutor/TestSuiteExecutor')
 
 module.exports = class TestSuite {
   constructor() {
     /**
      *
-     * @type {Array<TestExecutor>}
+     * @type {Array<TestCase>}
      * @private
      */
     this.__test = []
   }
 
   exec() {
-    console.log(`
-###########################################################################
-###########################################################################
-
-               _              _ _   _                _            
-              | |            | | | (_)              | |           
-  ___ ___   __| | ___    __ _| | |_ _ _ __ ___   ___| |_ ___ _ __ 
- / __/ _ \\ / _\` |/ _ \\  / _\` | | __| | '_ \` _ \\ / _ \\ __/ _ \\ '__|
-| (_| (_) | (_| |  __/ | (_| | | |_| | | | | | |  __/ ||  __/ |   
- \\___\\___/ \\__,_|\\___|  \\__,_|_|\\__|_|_| |_| |_|\\___|\\__\\___|_|   
-                                                                  
-                                                                  
-###########################################################################
-`)
-    this.__test.forEach((v) => {
-      v.exec()
-    })
-    console.log(`
-
-#######################
-
-END TestSuite
-
-#######################
-#######################
-#######################
-
-
-     `)
+    new TestSuiteExecutor(this).exec()
   }
 
   /**
@@ -48,7 +20,7 @@ END TestSuite
    * @return {TestSuite}
    */
   addTestCase(test) {
-    this.__test.push(new TestExecutor(test))
+    this.__test.push(test)
     return this
   }
 }

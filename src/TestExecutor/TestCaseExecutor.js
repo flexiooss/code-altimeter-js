@@ -1,8 +1,8 @@
-const TestError = require('./TestError')
-const {TEST_METHOD_PREFIX} = require('./constantes')
+const TestError = require('../TestError')
+const {TEST_METHOD_PREFIX} = require('../constantes')
 const VERBOSE = process.env.TEST_VERBOSE === 1
 
-module.exports = class TestExecutor {
+module.exports = class TestCaseExecutor {
   /**
    *
    * @param {TestCase} test
