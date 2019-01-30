@@ -10,8 +10,7 @@
     "hotballoon-shed:prod": "yarn hotballoon-shed --operation=production",
     "hotballoon-shed:dev": "yarn hotballoon-shed --operation=development -v"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
   }
 }
