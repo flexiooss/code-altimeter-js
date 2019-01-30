@@ -1,11 +1,12 @@
+/* global require */
 const path = require('path')
 const TestCase = require('./src/TestCase')
 const TestSuite = require('./src/TestSuite')
 const TestError = require('./src/TestError')
 const testsPath = require('./src/testsPath')
-const TestCaseExecutor = require('./TestExecutor/TestCaseExecutor')
-const executionContext = require('./src/executionContext.js')
-const pathForExecutionContext = path.resolve(__dirname, './src/executionContext.js')
+const TestCaseExecutor = require('./src/TestExecutor/TestCaseExecutor')
+const before = path.resolve(__dirname, './src/entries/before.js')
+const after = path.resolve(__dirname, './src/entries/after.js')
 
 module.exports = {
   TestCase: TestCase,
@@ -13,6 +14,8 @@ module.exports = {
   TestSuite: TestSuite,
   TestError: TestError,
   testsPath: testsPath,
-  executionContext: executionContext,
-  pathForExecutionContext: pathForExecutionContext
+  entries: {
+    before: before,
+    after: after
+  }
 }

@@ -1,55 +1,79 @@
 const TestError = require('../TestError')
 const {TEST_METHOD_PREFIX} = require('../constantes')
-const VERBOSE = process.env.TEST_VERBOSE === 1
 const TestCaseExecutor = require('./TestCaseExecutor')
-const Report = require('./Report')
+const TestSuiteReport = require('../Report/TestSuiteReport')
+const TestExecutor = require('./TestExecutor')
+const Reporter = require('../Report/Reporter')
+const VERBOSE = process.env.TEST_VERBOSE === 1
 
-module.exports = class TestSuiteExecutor {
+/**
+ * @implements TestExecutor
+ * @extends TestExecutor
+ */
+class TestSuiteExecutor extends TestExecutor {
   /**
    *
    * @param {TestSuite} testSuite
    */
   constructor(testSuite) {
+    super()
     /**
      *
      * @type {TestSuite}
      * @private
      */
     this.__testSuite = testSuite
-    /**
-     *
-     * @type {Array<string>}
-     * @private
-     */
-    this.__testsList = []
 
     /**
      *
-     * @type {number}
+     * @type {TestSuiteReport}
      * @private
      */
-    this.__testsPass = 0
-    /**
-     *
-     * @type {number}
-     * @private
-     */
-    this.__testsFail = 0
-    /**
-     *
-     * @type {boolean}
-     * @private
-     */
-    this.__error = false
+    this.__report = new TestSuiteReport()
   }
 
+  /**
+   *
+   * @return {TestSuiteReport}
+   */
   exec() {
-    this.__startTestSuite()
+    this
+      .__startTestSuite()
+      .__updateTestCaseCount()
+      .__runAllTestCase()
+      .__finishTestSuite()
+    new Reporter(this.__report).show().throw()
+    return this.__report
+  }
 
-    this.__testSuite.__test.forEach((test) => {
-      new TestCaseExecutor(test).exec()
+  /**
+   *
+   * @return {TestSuiteExecutor}
+   * @private
+   */
+  __updateTestCaseCount() {
+    this.__report.testCaseCount = this.__testSuite.countOfTestCase()
+    return this
+  }
+
+  /**
+   *
+   * @return {TestSuiteExecutor}
+   * @private
+   */
+  __runAllTestCase() {
+    this.__testSuite.testCases.forEach((test) => {
+      const report = new TestCaseExecutor(test).exec()
+      const testCasePass = report.testFail === 0
+      this.__report = this.__report
+        .withTestCaseCount(this.__report.testCaseCount + 1)
+        .withTestCasePass(this.__report.testCaseFail + (testCasePass ? 1 : 0))
+        .withTestCaseFail(this.__report.testCaseFail + (testCasePass ? 0 : 1))
+        .withTestCount(this.__report.testCount + report.testCount)
+        .withTestFail(this.__report.testFail + report.testFail)
+        .withTestPass(this.__report.testPass + report.testPass)
     })
-    this.__finishTestSuite()
+    return this
   }
 
   /**
@@ -59,41 +83,8 @@ module.exports = class TestSuiteExecutor {
    */
   __startTestSuite() {
     if (VERBOSE) {
-      console.log(`
-    
-##########
-################################################
-Start ${this.__testSuite.constructor.name} `)
+      console.log('\x1b[46m%s\x1b[0m', ` Start ${this.__testSuite.constructor.name} `)
     }
-    return this
-  }
-
-  /**
-   *
-   * @return {number}
-   * @private
-   */
-  __testsCount() {
-    return this.__testsList.length
-  }
-
-  /**
-   *
-   * @return {TestExecutor}
-   * @private
-   */
-  __incrementTestPass() {
-    this.__testsPass++
-    return this
-  }
-
-  /**
-   *
-   * @return {TestExecutor}
-   * @private
-   */
-  __incrementTestFail() {
-    this.__testsFail++
     return this
   }
 
@@ -103,8 +94,11 @@ Start ${this.__testSuite.constructor.name} `)
    * @private
    */
   __finishTestSuite() {
-    new Report()
-      .withTestCaseCount(this.__testSuite.countOfTestCase())
+    if (VERBOSE) {
+      console.log('\x1b[46m%s\x1b[0m', ` Finish ${this.__testSuite.constructor.name} `)
+    }
     return this
   }
 }
+
+module.exports = TestSuiteExecutor

@@ -1,6 +1,6 @@
 const TestSuiteExecutor = require('./TestExecutor/TestSuiteExecutor')
 
-module.exports = class TestSuite {
+class TestSuite {
   constructor() {
     /**
      *
@@ -10,7 +10,7 @@ module.exports = class TestSuite {
     this.__test = []
   }
 
-  exec() {
+  run() {
     new TestSuiteExecutor(this).exec()
   }
 
@@ -31,4 +31,14 @@ module.exports = class TestSuite {
   countOfTestCase() {
     return this.__test.length
   }
+
+  /**
+   *
+   * @return {Array<TestCase>}
+   */
+  get testCases() {
+    return this.__test
+  }
 }
+
+module.exports = TestSuite

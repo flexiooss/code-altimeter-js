@@ -1,11 +1,6 @@
-module.exports = (() => {
-  if (typeof window === 'undefined') {
-    global.window = {}
-    window.__ASSERT__ = true
-    window.__DEBUG__ = true
-    window.__DEVELOPMENT__ = true
-  }
-  console.log(`
+class TestRun {
+  start() {
+    console.log(`
 ###########################################################################
 ###########################################################################
 
@@ -16,7 +11,21 @@ module.exports = (() => {
 | (_| (_) | (_| |  __/ | (_| | | |_| | | | | | |  __/ ||  __/ |   
  \\___\\___/ \\__,_|\\___|  \\__,_|_|\\__|_|_| |_| |_|\\___|\\__\\___|_|   
                                                                   
-                                                                  by Flexio
+  by Flexio
 ###########################################################################
 `)
-})()
+  }
+  showReport() {
+    console.log('fini')
+    return this
+  }
+  throw() {
+    console.log('throw')
+    return this
+  }
+}
+
+const instance = new TestRun()
+Object.freeze(instance)
+
+module.exports = instance

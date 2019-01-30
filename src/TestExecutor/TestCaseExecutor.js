@@ -1,13 +1,19 @@
-const TestError = require('../TestError')
 const {TEST_METHOD_PREFIX} = require('../constantes')
 const VERBOSE = process.env.TEST_VERBOSE === 1
+const TestCaseReport = require('../Report/TestCaseReport')
+const TestExecutor = require('./TestExecutor')
 
-module.exports = class TestCaseExecutor {
+/**
+ * @implements TestExecutor
+ * @extends TestExecutor
+ */
+class TestCaseExecutor extends TestExecutor {
   /**
    *
    * @param {TestCase} test
    */
   constructor(test) {
+    super()
     /**
      *
      * @type {TestCase}
@@ -20,53 +26,46 @@ module.exports = class TestCaseExecutor {
      * @private
      */
     this.__testsList = []
-
     /**
      *
-     * @type {number}
+     * @type {TestCaseReport}
      * @private
      */
-    this.__testsPass = 0
-    /**
-     *
-     * @type {number}
-     * @private
-     */
-    this.__testsFail = 0
-    /**
-     *
-     * @type {boolean}
-     * @private
-     */
-    this.__error = false
-  }
-
-  exec() {
-    this.__invokeBeforeClass()
-      .__updateTestsList()
-      .__runTests()
-      .__invokeAfterClass()
+    this.__report = new TestCaseReport()
   }
 
   /**
    *
-   * @return {TestExecutor}
+   * @return {TestCaseReport}
+   */
+  exec() {
+    this.__invokeBeforeClass()
+      .__updateTestsList()
+      .__updateTestCount(this.__testsList.length)
+      .__runTests()
+      .__invokeAfterClass()
+    return this.__report
+  }
+
+  /**
+   *
+   * @return {TestCaseExecutor}
    * @private
    */
   __invokeBeforeClass() {
     this.__test.constructor.beforeClass()
     if (VERBOSE) {
-      console.log(`
+      console.log('\x1b[36m%s\x1b[0m', `
     
 ------------------------------------------------------
-Start ${this.__test.constructor.name} `)
+Start test case ${this.__test.constructor.name} `)
     }
     return this
   }
 
   /**
    *
-   * @return {TestExecutor}
+   * @return {TestCaseExecutor}
    * @private
    */
   __runTests() {
@@ -75,7 +74,7 @@ Start ${this.__test.constructor.name} `)
      */
     this.__testsList.forEach((v) => {
       if (VERBOSE) {
-        console.log(`------------------------------------------------------
+        console.log('\x1b[90m%s\x1b[0m', `------------------------------------
 Setup ${v} 
 `)
       }
@@ -86,25 +85,24 @@ Setup ${v}
       try {
         this.__test[v]()
         if (VERBOSE) {
-          console.log(`Test pass ${v}`)
+          console.log('\x1b[92m%s\x1b[0m', `Test pass ${v}`)
         }
         this.__incrementTestPass()
       } catch (e) {
-        console.log(`
+        console.log('\x1b[31m%s\x1b[0m', `
        
 ########################################        
 ###### TEST FAIL      ${this.__test.constructor.name}:${v}
 ########################################
 `)
         console.log(e)
-        console.log(`
+        console.log('\x1b[31m%s\x1b[0m', `
 ########################################
 `)
         this.__incrementTestFail()
-        this.__error = true
       }
       if (VERBOSE) {
-        console.log(`------------------------------------------------------
+        console.log('\x1b[90m%s\x1b[0m', `------------------------------
 tearDown ${v} 
 `)
       }
@@ -115,7 +113,7 @@ tearDown ${v}
 
   /**
    *
-   * @return {TestExecutor}
+   * @return {TestCaseExecutor}
    * @private
    */
   __updateTestsList() {
@@ -128,44 +126,45 @@ tearDown ${v}
 
   /**
    *
-   * @return {number}
+   * @param {number} n
+   * @return {TestCaseExecutor}
    * @private
    */
-  __testsCount() {
-    return this.__testsList.length
-  }
-
-  /**
-   *
-   * @return {TestExecutor}
-   * @private
-   */
-  __incrementTestPass() {
-    this.__testsPass++
+  __updateTestCount(n) {
+    this.__report.withTestCount(n)
     return this
   }
 
   /**
    *
-   * @return {TestExecutor}
+   * @return {TestCaseExecutor}
+   * @private
+   */
+  __incrementTestPass() {
+    this.__report.testPass++
+    return this
+  }
+
+  /**
+   *
+   * @return {TestCaseExecutor}
    * @private
    */
   __incrementTestFail() {
-    this.__testsFail++
+    this.__report.testFail++
     return this
   }
 
   /**
    *
    * @param {TestCase} obj
-   * @param stop
    * @return {Array<string>}
    * @private
    */
-  __getInstanceMethodNames(obj, stop) {
+  __getInstanceMethodNames(obj) {
     let array = []
     let proto = Object.getPrototypeOf(obj)
-    while (proto && proto !== stop) {
+    while (proto) {
       Object.getOwnPropertyNames(proto)
         .forEach(name => {
           if (name !== 'constructor') {
@@ -193,69 +192,18 @@ tearDown ${v}
 
   /**
    *
-   * @return {TestExecutor}
+   * @return {TestCaseExecutor}
    * @private
    */
   __invokeAfterClass() {
     this.__test.constructor.afterClass()
     if (VERBOSE) {
-      console.log(`------------------------------------------------------
-Finish ${this.__test.constructor.name} 
+      console.log('\x1b[36m%s\x1b[0m', `------------------------------------------------------
+Finish test case ${this.__test.constructor.name} 
 `)
-    }
-
-    console.log(`
-------------------------------------------------------
-  ############
- #  REPORT  #
-############
-# Test case : ${this.__test.constructor.name}`)
-
-    if (this.__error) {
-      console.log(` Pass : ${this.__testsPass} / ${this.__testsCount()} `)
-      console.log('\x1b[41m\x1b[30m%s\x1b[0m', `Fail : ${this.__testsFail} / ${this.__testsCount()}`)
-      console.log('\x1b[31m%s\x1b[0m', `88888888888888888888888  TEST FAIL  888888888888888888888888   
-888888888888888888888888888888888888888888888888888888888888
-888888888888888888888888888888888888888888888888888888888888
-8888888888888888888888888P""  ""9888888888888888888888888888
-8888888888888888P"88888P          988888"9888888888888888888
-8888888888888888  "9888            888P"  888888888888888888
-888888888888888888bo "9  d8o  o8b  P" od88888888888888888888
-888888888888888888888bob 98"  "8P dod88888888888888888888888
-888888888888888888888888    db    88888888888888888888888888
-88888888888888888888888888      8888888888888888888888888888
-88888888888888888888888P"9bo  odP"98888888888888888888888888
-88888888888888888888P" od88888888bo "98888888888888888888888
-888888888888888888   d88888888888888b   88888888888888888888
-8888888888888888888oo8888888888888888oo888888888888888888888
-888888888888888888888888888888888888888888888888888888888888`)
-      throw new TestError('TEST FAILED')
-    } else {
-      console.log('\x1b[102m\x1b[30m%s\x1b[0m', `Pass : ${this.__testsPass} / ${this.__testsCount()}`)
-      console.log('\x1b[92m%s\x1b[0m', `        _______ 
-      (=========)
-      |=========|
-      |====_====|
-      |== / \\ ==|
-      |= / _ \\ =|
-   _  |=| ( ) |=|
-  /=\\ |=|     |=| /=\\
-  |=| |=| --- |=| |=|
-  |=| |=|  _  |=| |=|
-  |=| |=|  |  |=| |=|
-  |=| |=|  |  |=| |=|
-  |=| |=|  |  |=| |=|
-  |=| |/   |   \\| |=|
-  |=|/     |     \\|=|
-  |=/    FLEXIO   \\=|
-  |(_______________)|
-  |=| |_|__|__|_| |=|
-  |=|   ( ) ( )   |=|
- /===\\           /===\\
-|||||||         |||||||
--------         -------
- (~~~)           (~~~)`)
     }
     return this
   }
 }
+
+module.exports = TestCaseExecutor
