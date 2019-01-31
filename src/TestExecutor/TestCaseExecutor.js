@@ -4,22 +4,20 @@ const TestCaseReport = require('../Report/TestCaseReport')
 const TestExecutor = require('./TestExecutor')
 
 /**
- * @implements TestExecutor
- * @extends TestExecutor
+ * @implements TestExecutable
  */
-class TestCaseExecutor extends TestExecutor {
+class TestCaseExecutor {
   /**
    *
-   * @param {TestCase} test
+   * @param {TestCase} testCase
    */
-  constructor(test) {
-    super()
+  constructor(testCase) {
     /**
      *
      * @type {TestCase}
      * @private
      */
-    this.__test = test
+    this.__testCase = testCase
     /**
      *
      * @type {Array<string>}
@@ -31,7 +29,7 @@ class TestCaseExecutor extends TestExecutor {
      * @type {TestCaseReport}
      * @private
      */
-    this.__report = new TestCaseReport()
+    this.__report = new TestCaseReport(this.__testCase.constructor.name)
   }
 
   /**
@@ -53,12 +51,12 @@ class TestCaseExecutor extends TestExecutor {
    * @private
    */
   __invokeBeforeClass() {
-    this.__test.constructor.beforeClass()
+    this.__testCase.constructor.beforeClass()
     if (VERBOSE) {
       console.log('\x1b[36m%s\x1b[0m', `
     
 ------------------------------------------------------
-Start test case ${this.__test.constructor.name} `)
+Start test case ${this.__testCase.constructor.name} `)
     }
     return this
   }
@@ -78,12 +76,12 @@ Start test case ${this.__test.constructor.name} `)
 Setup ${v} 
 `)
       }
-      this.__test.setUp()
+      this.__testCase.setUp()
       if (VERBOSE) {
         console.log(`Test  ${v}`)
       }
       try {
-        this.__test[v]()
+        this.__testCase[v]()
         if (VERBOSE) {
           console.log('\x1b[92m%s\x1b[0m', `Test pass ${v}`)
         }
@@ -92,7 +90,7 @@ Setup ${v}
         console.log('\x1b[31m%s\x1b[0m', `
        
 ########################################        
-###### TEST FAIL      ${this.__test.constructor.name}:${v}
+###### TEST FAIL      ${this.__testCase.constructor.name}:${v}
 ########################################
 `)
         console.log(e)
@@ -106,7 +104,7 @@ Setup ${v}
 tearDown ${v} 
 `)
       }
-      this.__test.tearDown()
+      this.__testCase.tearDown()
     })
     return this
   }
@@ -117,7 +115,7 @@ tearDown ${v}
    * @private
    */
   __updateTestsList() {
-    this.__testsList.push(...this.__getInstanceMethodNames(this.__test)
+    this.__testsList.push(...this.__getInstanceMethodNames(this.__testCase)
       .filter((v) => {
         return v.startsWith(TEST_METHOD_PREFIX)
       }))
@@ -196,10 +194,10 @@ tearDown ${v}
    * @private
    */
   __invokeAfterClass() {
-    this.__test.constructor.afterClass()
+    this.__testCase.constructor.afterClass()
     if (VERBOSE) {
       console.log('\x1b[36m%s\x1b[0m', `------------------------------------------------------
-Finish test case ${this.__test.constructor.name} 
+Finish test case ${this.__testCase.constructor.name} 
 `)
     }
     return this

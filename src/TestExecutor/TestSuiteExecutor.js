@@ -2,21 +2,18 @@ const TestError = require('../runner/TestError')
 const {TEST_METHOD_PREFIX} = require('../constantes')
 const TestCaseExecutor = require('./TestCaseExecutor')
 const TestSuiteReport = require('../Report/TestSuiteReport')
-const TestExecutor = require('./TestExecutor')
 const Reporter = require('../Report/Reporter')
 const VERBOSE = process.env.TEST_VERBOSE === 1
 
 /**
- * @implements TestExecutor
- * @extends TestExecutor
+ * @implements TestExecutable
  */
-class TestSuiteExecutor extends TestExecutor {
+class TestSuiteExecutor {
   /**
    *
    * @param {TestSuite} testSuite
    */
   constructor(testSuite) {
-    super()
     /**
      *
      * @type {TestSuite}
@@ -29,7 +26,7 @@ class TestSuiteExecutor extends TestExecutor {
      * @type {TestSuiteReport}
      * @private
      */
-    this.__report = new TestSuiteReport()
+    this.__report = new TestSuiteReport(this.__testSuite.constructor.name)
   }
 
   /**

@@ -64,10 +64,11 @@ class TestRunReport extends TestSuiteReport {
    */
   logReport() {
     if (this.failed()) {
-      console.log(`TestCase Pass : ${this.testSuitePass} / ${this.testSuiteCount} `)
+      console.log(`TestSuite Pass : ${this.testSuitePass} / ${this.testSuiteCount} `)
       console.log(`TestCase Pass : ${this.testCasePass} / ${this.testCaseCount} `)
       console.log(`Tests Pass : ${this.testPass} / ${this.testCount} `)
 
+      console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` TestSuite Fail : ${this.testSuiteFail} / ${this.testSuiteCount} `)
       console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` TestCase Fail : ${this.testSuiteFail} / ${this.testSuiteCount} `)
       console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` Tests Fail : ${this.testFail} / ${this.testCount()} `)
     } else {

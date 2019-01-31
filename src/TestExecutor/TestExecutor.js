@@ -1,12 +1,17 @@
+const TestReport = require('../Report/TestReport')
 /**
- * @interface
+ * @implements {TestExecutable}
  */
 class TestExecutor {
+  constructor(test) {
+    this.__test = test
+    this.__report = new TestReport(this.__test.name)
+  }
   /**
    * @return {Report}
    */
   exec() {
-    throw Error('should be override')
+    return this.__report
   }
 }
 
