@@ -67,11 +67,9 @@ class TestReport {
    */
   logReport() {
     if (this.failed()) {
-      console.log(`Tests Pass : ${this.testPass} / ${this.testCount} `)
-
-      console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` Fail : ${this.testFail} / ${this.testCount()} `)
+      console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` Test Fail `)
     } else {
-      console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` Tests Pass : ${this.testPass} / ${this.testCount} `)
+      console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` Tests Pass `)
     }
     return this
   }
