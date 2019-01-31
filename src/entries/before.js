@@ -1,4 +1,4 @@
-const TestRun = require('../TestRun')
+const TestRun = require('../runner/TestRun')
 module.exports = (() => {
   if (typeof window === 'undefined') {
     global.TestRun = TestRun
@@ -7,5 +7,5 @@ module.exports = (() => {
     window.__DEBUG__ = true
     window.__DEVELOPMENT__ = true
   }
-  TestRun.start()
+  TestRun.welcome()
 })()

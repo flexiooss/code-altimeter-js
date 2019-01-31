@@ -1,5 +1,8 @@
-const TestSuiteExecutor = require('./TestExecutor/TestSuiteExecutor')
+const TestSuiteExecutor = require('../TestExecutor/TestSuiteExecutor')
 
+/**
+ * HaveTestExecutor
+ */
 class TestSuite {
   constructor() {
     /**

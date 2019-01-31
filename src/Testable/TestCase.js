@@ -1,4 +1,7 @@
-module.exports = class TestCase {
+/**
+ * @implements HaveTestExecutor
+ */
+class TestCase {
   static beforeClass() {
   }
 
@@ -11,3 +14,4 @@ module.exports = class TestCase {
   tearDown() {
   }
 }
+module.exports = TestCase

@@ -1,4 +1,4 @@
-const TestError = require('../TestError')
+const TestError = require('../runner/TestError')
 
 class Reporter {
   /**

@@ -1,4 +1,6 @@
 /* global TestRun */
 module.exports = (() => {
-  TestRun.showReport().throw()
+  TestRun.start()
+    .showReport()
+    .throw()
 })()

@@ -1,4 +1,4 @@
-const TestError = require('../TestError')
+const TestError = require('../runner/TestError')
 const {TEST_METHOD_PREFIX} = require('../constantes')
 const TestCaseExecutor = require('./TestCaseExecutor')
 const TestSuiteReport = require('../Report/TestSuiteReport')
@@ -52,7 +52,7 @@ class TestSuiteExecutor extends TestExecutor {
    * @private
    */
   __updateTestCaseCount() {
-    this.__report.testCaseCount = this.__testSuite.countOfTestCase()
+    this.__report.testSuiteCount = this.__testSuite.countOfTestCase()
     return this
   }
 

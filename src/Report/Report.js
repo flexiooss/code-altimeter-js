@@ -4,6 +4,14 @@
  */
 class Report {
   /**
+   *
+   * @return {string}
+   */
+  get name() {
+    throw Error('should be override')
+  }
+
+  /**
    * @return {Report}
    */
   logReport() {

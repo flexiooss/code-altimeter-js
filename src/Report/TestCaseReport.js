@@ -1,4 +1,4 @@
-const TestError = require('../TestError')
+const TestError = require('../runner/TestError')
 const {TEST_METHOD_PREFIX} = require('../constantes')
 const VERBOSE = process.env.TEST_VERBOSE === 1
 const TestCaseExecutor = require('../TestExecutor/TestCaseExecutor')
@@ -8,9 +8,18 @@ const Report = require('./Report')
  * @implements {Report}
  * @type {TestCaseReport}
  */
-class TestCaseReport extends Report {
-  constructor() {
-    super()
+class TestCaseReport {
+  /**
+   *
+   * @param {string} name
+   */
+  constructor(name) {
+    /**
+     *
+     * @type {string}
+     * @private
+     */
+    this.__name = name
     /**
      *
      * @type {number}
@@ -26,6 +35,14 @@ class TestCaseReport extends Report {
      * @type {number}
      */
     this.testPass = 0
+  }
+
+  /**
+   *
+   * @return {string}
+   */
+  get name() {
+    return this.__name
   }
 
   /**

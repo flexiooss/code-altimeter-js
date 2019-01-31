@@ -1,16 +1,11 @@
-const TestError = require('../runner/TestError')
-const {TEST_METHOD_PREFIX} = require('../constantes')
-const VERBOSE = process.env.TEST_VERBOSE === 1
-const TestCaseExecutor = require('../TestExecutor/TestCaseExecutor')
-const TestCaseReport = require('./TestCaseReport')
+const TestSuiteReport = require('./TestSuiteReport')
 
 /**
  *
  * @implements {Report}
- * @extends {TestCaseReport}
- * @type {TestSuiteReport}
+ * @extends {TestSuiteReport}
  */
-class TestSuiteReport extends TestCaseReport {
+class TestRunReport extends TestSuiteReport {
   /**
    *
    * @param {string} name
@@ -21,60 +16,62 @@ class TestSuiteReport extends TestCaseReport {
      *
      * @type {number}
      */
-    this.testCaseCount = 0
+    this.testSuiteCount = 0
     /**
      *
      * @type {number}
      */
-    this.testCaseFail = 0
+    this.testSuiteFail = 0
     /**
      *
      * @type {number}
      */
-    this.testCasePass = 0
+    this.testSuitePass = 0
   }
 
   /**
    *
    * @param {number} n
-   * @return {TestSuiteReport}
+   * @return {TestRunReport}
    */
-  withTestCaseCount(n) {
-    this.testCaseCount = n
+  withTestSuiteCount(n) {
+    this.testSuiteCount = n
     return this
   }
 
   /**
    *
    * @param {number} n
-   * @return {TestSuiteReport}
+   * @return {TestRunReport}
    */
-  withTestCasePass(n) {
-    this.testCasePass = n
+  withTestSuitePass(n) {
+    this.testSuitePass = n
     return this
   }
 
   /**
    *
    * @param {number} n
-   * @return {TestSuiteReport}
+   * @return {TestRunReport}
    */
-  withTestCaseFail(n) {
-    this.testCaseFail = n
+  withTestSuiteFail(n) {
+    this.testSuiteFail = n
     return this
   }
   /**
    * @override
-   * @return {TestCaseReport}
+   * @return {TestRunReport}
    */
   logReport() {
     if (this.failed()) {
+      console.log(`TestCase Pass : ${this.testSuitePass} / ${this.testSuiteCount} `)
       console.log(`TestCase Pass : ${this.testCasePass} / ${this.testCaseCount} `)
       console.log(`Tests Pass : ${this.testPass} / ${this.testCount} `)
 
-      console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` TestCase Fail : ${this.testCaseFail} / ${this.testCaseCount} `)
+      console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` TestCase Fail : ${this.testSuiteFail} / ${this.testSuiteCount} `)
       console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` Tests Fail : ${this.testFail} / ${this.testCount()} `)
     } else {
+      console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` TestCase Pass : ${this.testSuitePass} / ${this.testSuiteCount}  `)
       console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` TestCase Pass : ${this.testCasePass} / ${this.testCaseCount}  `)
       console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` Tests Pass : ${this.testPass} / ${this.testCount} `)
     }
@@ -82,4 +79,4 @@ class TestSuiteReport extends TestCaseReport {
   }
 }
 
-module.exports = TestSuiteReport
+module.exports = TestRunReport
