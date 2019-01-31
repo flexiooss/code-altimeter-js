@@ -1,5 +1,5 @@
 /**
- * @implements HaveTestExecutor
+ * @implements {HaveTestExecutor}
  */
 class TestCase {
   static beforeClass() {

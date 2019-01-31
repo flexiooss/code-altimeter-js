@@ -1,13 +1,50 @@
+const Reporter = require('../Report/Reporter')
+const TestExecutorBuilder = require('../TestExecutor/TestExecutorBuilder')
+const TestRunReport = require('../Report/TestRunReport')
+const ReportContainer = require('../Report/ReportContainer')
+
 class TestRun {
-  constructor() {
+  /**
+   *
+   * @param {ReportContainer} reportContainer
+   */
+  constructor(reportContainer) {
     /**
      *
-     * @type {Array}
+     * @type {Array<HaveTestExecutor>}
      * @private
      */
     this.__testable = []
-    this._report = new TestRunReport()
+    /**
+     *
+     * @type {ReportContainer}
+     * @private
+     */
+    this.__reportContainer = reportContainer
+    /**
+     *
+     * @type {boolean}
+     * @private
+     */
+    this.__verbose = false
+    /**
+     *
+     * @type {Reporter}
+     * @private
+     */
+    this.__reporter = new Reporter(this.__reportContainer.testRunReport)
   }
+
+  /**
+   *
+   * @param {HaveTestExecutor} test
+   * @return {TestRun}
+   */
+  addTest(test) {
+    this.__testable.push(test)
+    return this
+  }
+
   welcome() {
     console.log(`
 ###########################################################################
@@ -30,7 +67,54 @@ class TestRun {
    * @return {TestRun}
    */
   start() {
+    this.__testable.forEach((test) => {
+      /**
+       *
+       * @type {Report}
+       */
+      const report = TestExecutorBuilder.build(test)
+        .exec()
+    })
     return this
+  }
+
+  /**
+   *
+   * @param {Report} report
+   * @private
+   * @return {TestRun}
+   */
+  __addReport(report) {
+    this.__reportContainer.addReport(report)
+    return this
+  }
+
+  /**
+   *
+   * @param {boolean} v
+   * @return {TestRun}
+   */
+  withVerbose(v) {
+    this.__verbose = v
+    return this
+  }
+
+  /**
+   *
+   * @param {ReportContainer} reportContainer
+   * @return {TestRun}
+   */
+  withReportContainer(reportContainer) {
+    this.__reportContainer = reportContainer
+    return this
+  }
+
+  /**
+   *
+   * @return {?Reporter}
+   */
+  get reportContainer() {
+    return this.__reportContainer
   }
 
   /**
@@ -38,7 +122,9 @@ class TestRun {
    * @return {TestRun}
    */
   showReport() {
-    console.log('fini')
+    this
+      .__reporter
+      .show()
     return this
   }
 
@@ -47,12 +133,21 @@ class TestRun {
    * @return {TestRun}
    */
   throw() {
-    console.log('throw')
+    this
+      .__reporter
+      .throw()
     return this
   }
 }
 
-const instance = new TestRun()
-Object.freeze(instance)
+const instance = new TestRun(
+  new ReportContainer(
+    new TestRunReport(
+      new Date().toString()
+    )
+  )
+)
+
+// Object.freeze(instance)
 
 module.exports = instance

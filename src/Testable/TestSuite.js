@@ -1,7 +1,7 @@
 const TestSuiteExecutor = require('../TestExecutor/TestSuiteExecutor')
 
 /**
- * HaveTestExecutor
+ * @implements {HaveTestExecutor}
  */
 class TestSuite {
   constructor() {
