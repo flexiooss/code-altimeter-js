@@ -8,17 +8,18 @@ const TestSuiteExecutor = require('./TestSuiteExecutor')
 class TestExecutorBuilder {
   /**
    * @static
-   * @param {HaveTestExecutor} test
+   * @param {Array<{test: HaveTestExecutor, testName: ?string}>} test
+   * @param {TestRun} runner
    * @return {TestExecutable}
    */
-  static build(test) {
-    switch (test.constructor) {
+  static build(test, runner) {
+    switch (test.test.constructor) {
       case Test:
-        return new TestExecutor(test)
+        return new TestExecutor(test.test,test.testName, runner)
       case TestCase:
-        return new TestCaseExecutor(test)
+        return new TestCaseExecutor(test.test, runner)
       case TestSuite:
-        return new TestSuiteExecutor(test)
+        return new TestSuiteExecutor(test.test, runner)
       default:
         throw Error('This Test have no Executor')
     }

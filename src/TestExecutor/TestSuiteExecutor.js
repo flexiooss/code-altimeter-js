@@ -3,7 +3,6 @@ const {TEST_METHOD_PREFIX} = require('../constantes')
 const TestCaseExecutor = require('./TestCaseExecutor')
 const TestSuiteReport = require('../Report/TestSuiteReport')
 const Reporter = require('../Report/Reporter')
-const VERBOSE = process.env.TEST_VERBOSE === 1
 
 /**
  * @implements TestExecutable
@@ -12,8 +11,9 @@ class TestSuiteExecutor {
   /**
    *
    * @param {TestSuite} testSuite
+   * @param {TestRun} runner
    */
-  constructor(testSuite) {
+  constructor(testSuite, runner) {
     /**
      *
      * @type {TestSuite}
@@ -27,6 +27,12 @@ class TestSuiteExecutor {
      * @private
      */
     this.__report = new TestSuiteReport(this.__testSuite.constructor.name)
+    /**
+     *
+     * @type {TestRun}
+     * @private
+     */
+    this.__runner = runner
   }
 
   /**
@@ -39,7 +45,6 @@ class TestSuiteExecutor {
       .__updateTestCaseCount()
       .__runAllTestCase()
       .__finishTestSuite()
-    new Reporter(this.__report).show().throw()
     return this.__report
   }
 
@@ -60,7 +65,7 @@ class TestSuiteExecutor {
    */
   __runAllTestCase() {
     this.__testSuite.testCases.forEach((test) => {
-      const report = new TestCaseExecutor(test).exec()
+      const report = new TestCaseExecutor(test, this.__runner).exec()
       const testCasePass = report.testFail === 0
       this.__report = this.__report
         .withTestCaseCount(this.__report.testCaseCount + 1)
@@ -79,7 +84,7 @@ class TestSuiteExecutor {
    * @private
    */
   __startTestSuite() {
-    if (VERBOSE) {
+    if (this.__runner.isVerbose()) {
       console.log('\x1b[46m%s\x1b[0m', ` Start ${this.__testSuite.constructor.name} `)
     }
     return this
@@ -87,11 +92,11 @@ class TestSuiteExecutor {
 
   /**
    *
-   * @return {TestExecutor}
+   * @return {TestSuiteExecutor}
    * @private
    */
   __finishTestSuite() {
-    if (VERBOSE) {
+    if (this.__runner.isVerbose()) {
       console.log('\x1b[46m%s\x1b[0m', ` Finish ${this.__testSuite.constructor.name} `)
     }
     return this

@@ -1,9 +1,3 @@
-const TestError = require('../runner/TestError')
-const {TEST_METHOD_PREFIX} = require('../constantes')
-const VERBOSE = process.env.TEST_VERBOSE === 1
-const TestCaseExecutor = require('../TestExecutor/TestCaseExecutor')
-const Report = require('./Report')
-
 /**
  * @implements {Report}
  * @type {TestReport}

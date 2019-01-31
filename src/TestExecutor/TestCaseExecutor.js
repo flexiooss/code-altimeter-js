@@ -1,5 +1,4 @@
 const {TEST_METHOD_PREFIX} = require('../constantes')
-const VERBOSE = process.env.TEST_VERBOSE === 1
 const TestCaseReport = require('../Report/TestCaseReport')
 const TestExecutor = require('./TestExecutor')
 
@@ -10,8 +9,9 @@ class TestCaseExecutor {
   /**
    *
    * @param {TestCase} testCase
+   * @param {TestRun} runner
    */
-  constructor(testCase) {
+  constructor(testCase, runner) {
     /**
      *
      * @type {TestCase}
@@ -30,6 +30,12 @@ class TestCaseExecutor {
      * @private
      */
     this.__report = new TestCaseReport(this.__testCase.constructor.name)
+    /**
+     *
+     * @type {TestRun}
+     * @private
+     */
+    this.__runner = runner
   }
 
   /**
@@ -52,7 +58,7 @@ class TestCaseExecutor {
    */
   __invokeBeforeClass() {
     this.__testCase.constructor.beforeClass()
-    if (VERBOSE) {
+    if (this.__runner.isVerbose()) {
       console.log('\x1b[36m%s\x1b[0m', `
     
 ------------------------------------------------------
@@ -71,40 +77,10 @@ Start test case ${this.__testCase.constructor.name} `)
      * @type {Array<string>} tests
      */
     this.__testsList.forEach((v) => {
-      if (VERBOSE) {
-        console.log('\x1b[90m%s\x1b[0m', `------------------------------------
-Setup ${v} 
-`)
-      }
-      this.__testCase.setUp()
-      if (VERBOSE) {
-        console.log(`Test  ${v}`)
-      }
-      try {
-        this.__testCase[v]()
-        if (VERBOSE) {
-          console.log('\x1b[92m%s\x1b[0m', `Test pass ${v}`)
-        }
-        this.__incrementTestPass()
-      } catch (e) {
-        console.log('\x1b[31m%s\x1b[0m', `
-       
-########################################        
-###### TEST FAIL      ${this.__testCase.constructor.name}:${v}
-########################################
-`)
-        console.log(e)
-        console.log('\x1b[31m%s\x1b[0m', `
-########################################
-`)
-        this.__incrementTestFail()
-      }
-      if (VERBOSE) {
-        console.log('\x1b[90m%s\x1b[0m', `------------------------------
-tearDown ${v} 
-`)
-      }
-      this.__testCase.tearDown()
+      this.__updateReport(new TestExecutor(
+        this.__testCase, v, this.__runner)
+        .exec()
+      )
     })
     return this
   }
@@ -135,21 +111,14 @@ tearDown ${v}
 
   /**
    *
+   * @param {TestReport} testReport
    * @return {TestCaseExecutor}
    * @private
    */
-  __incrementTestPass() {
-    this.__report.testPass++
-    return this
-  }
-
-  /**
-   *
-   * @return {TestCaseExecutor}
-   * @private
-   */
-  __incrementTestFail() {
-    this.__report.testFail++
+  __updateReport(testReport) {
+    this.__report
+      .withTestFail(this.__report.testFail + testReport.testFail)
+      .withTestPass(this.__report.testPass + testReport.testPass)
     return this
   }
 
@@ -195,7 +164,7 @@ tearDown ${v}
    */
   __invokeAfterClass() {
     this.__testCase.constructor.afterClass()
-    if (VERBOSE) {
+    if (this.__runner.isVerbose()) {
       console.log('\x1b[36m%s\x1b[0m', `------------------------------------------------------
 Finish test case ${this.__testCase.constructor.name} 
 `)

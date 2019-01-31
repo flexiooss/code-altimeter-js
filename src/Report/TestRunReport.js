@@ -79,10 +79,10 @@ class TestRunReport extends TestSuiteReport {
       if (this.testCaseCount) {
         console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` TestCase Fail : ${this.testSuiteFail} / ${this.testSuiteCount} `)
       }
-      console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` Tests Fail : ${this.testFail} / ${this.testCount()} `)
+      console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` Tests Fail : ${this.testFail} / ${this.testCount} `)
     } else {
       if (this.testSuiteCount) {
-        console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` TestCase Pass : ${this.testSuitePass} / ${this.testSuiteCount}  `)
+        console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` TestSuite Pass : ${this.testSuitePass} / ${this.testSuiteCount}  `)
       }
       if (this.testCaseCount) {
         console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` TestCase Pass : ${this.testCasePass} / ${this.testCaseCount}  `)

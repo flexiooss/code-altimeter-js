@@ -11,7 +11,7 @@ class TestRun {
   constructor(reportContainer) {
     /**
      *
-     * @type {Array<HaveTestExecutor>}
+     * @type {Array<{test: HaveTestExecutor,testName: ?string}>}
      * @private
      */
     this.__testable = []
@@ -38,10 +38,11 @@ class TestRun {
   /**
    *
    * @param {HaveTestExecutor} test
+   * @param {?string} testName
    * @return {TestRun}
    */
-  addTest(test) {
-    this.__testable.push(test)
+  addTest(test, testName = null) {
+    this.__testable.push({test: test, testName: testName})
     return this
   }
 
@@ -72,8 +73,10 @@ class TestRun {
        *
        * @type {Report}
        */
-      const report = TestExecutorBuilder.build(test)
-        .exec()
+      this.__addReport(
+        TestExecutorBuilder.build(test, this)
+          .exec()
+      )
     })
     return this
   }
@@ -101,6 +104,14 @@ class TestRun {
 
   /**
    *
+   * @return {boolean}
+   */
+  isVerbose() {
+    return this.__verbose === true
+  }
+
+  /**
+   *
    * @param {ReportContainer} reportContainer
    * @return {TestRun}
    */
@@ -122,6 +133,7 @@ class TestRun {
    * @return {TestRun}
    */
   showReport() {
+    this.__reportContainer.buildTestRunReport()
     this
       .__reporter
       .show()

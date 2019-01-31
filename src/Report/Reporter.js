@@ -29,28 +29,11 @@ class Reporter {
    ############ 
   #  REPORT  # 
  ############ 
+
 `)
     this.__report.logReport()
     this.__illustrate()
       .throw()
-    // if (this.__hasError()) {
-    //   if (this.__report. > 0) {
-    //     console.log(`TestCase Pass : ${this.__testCasePass} / ${this.__testCaseCount} `)
-    //   }
-    //   console.log(`Tests Pass : ${this.__testPass} / ${this.__testCount} `)
-    //
-    //   if (this.__testCaseCount > 0) {
-    //     console.log(`TestCase Fail : ${this.__testCaseFail} / ${this.__testCaseCount} `)
-    //   }
-    //   console.log('\x1b[41m\x1b[30m%s\x1b[0m', ` Fail : ${this.__testFail} / ${this.__testCount()} `)
-    //
-    // } else {
-    //   if (this.__testCaseCount > 0) {
-    //     console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` TestCase Pass : ${this.__testCasePass} / ${this.__testCaseCount} `)
-    //   }
-    //   console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` Tests Pass : ${this.__testPass} / ${this.__testCount} `)
-    //
-    // }
     return this
   }
 
