@@ -1,11 +1,10 @@
 const TestRun = require('../runner/TestRun')
+const runTest = require('../runner/runTest')
 
 module.exports = (() => {
   if (typeof window === 'undefined') {
     global.TestRun = TestRun
-    global.runTest = (test) => {
-      TestRun.addTest(test)
-    }
+    global.runTest = runTest
     global.window = {}
     window.__ASSERT__ = true
     window.__DEBUG__ = true

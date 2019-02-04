@@ -13,8 +13,14 @@ class TestSuite {
     this.__test = []
   }
 
-  run() {
-    new TestSuiteExecutor(this).exec()
+  /**
+   * @static
+   * @param {TestSuite} testSuite
+   * @param {TestRun} runner
+   * @return {TestExecutable}
+   */
+  static executor(testSuite, runner) {
+    return new TestSuiteExecutor(testSuite, runner)
   }
 
   /**

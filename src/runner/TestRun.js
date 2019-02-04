@@ -68,13 +68,14 @@ class TestRun {
    * @return {TestRun}
    */
   start() {
-    this.__testable.forEach((test) => {
+    this.__testable.forEach((testDescription) => {
       /**
        *
        * @type {Report}
        */
       this.__addReport(
-        TestExecutorBuilder.build(test, this)
+        TestExecutorBuilder
+          .build(testDescription, this)
           .exec()
       )
     })
@@ -159,7 +160,5 @@ const instance = new TestRun(
     )
   )
 )
-
-// Object.freeze(instance)
 
 module.exports = instance
