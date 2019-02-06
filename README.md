@@ -6,9 +6,9 @@
 #### Assertion
 code-altimeter is detached from any library of assertions
 
-### Code structure
-- The tests entries point files are into all ***\_\_tests\_\_/index.js*** files
-- Test entry methods must be prefixed with 'test'
+### Project structure
+- `__tests__` directory : the tests entries point files are into all ***\_\_tests\_\_/index.js*** files
+- Test entry methods must be prefixed with 'test' like : `testMyFeature()`
 
 ```
 -index.js
@@ -36,7 +36,7 @@ class MyTest extends TestCase {
 
 }
 
-TestRun(new MyTest())
+TestRun(MyTest)
 ```
 
 
@@ -62,17 +62,18 @@ yarn test -v
 ```javascript
 import {TestSuite} from 'code-altimeter-js'
 import {MyTest} from './MyTest'
+import {MyOtherTest} from './MyOtherTest'
 
 // Run Test Suite
-runTest(new TestSuite()
-   .addTestCase(new MyTest())
+runTest(TestSuite.withTestCase(MyTest)
+   .addTestCase( MyOtherTest)
 )
 
 // Run Test Case
-runTest(new MyTest())
+runTest(MyTest)
 
 // Run Test from Test Case
-runTest(new MyTest(), 'testWhoFail')
+runTest(MyTest, 'testWhoFail')
 
 ```
 
@@ -101,6 +102,27 @@ console.log('Executed after all tests from this TestCase')  }
   static afterClass() {
     console.log('Executed after the last test of this TestCase')
   }
+}
+
+export {MyTest}
+```
+### Use executable import
+> index.js file
+```javascript
+import './MyTest'
+```
+
+> MyTest.js
+```javascript
+import {TestCase} from 'code-altimeter-js'
+const assert = require('assert')
+
+class MyTest extends TestCase {
+
+  testHappy() {
+    assert(true, "Oups I did'nt break again")
+  }
+
 }
 
 export {MyTest}
