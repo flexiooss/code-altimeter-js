@@ -1,6 +1,22 @@
-export class StaticInvoker {
-  constructor(testExecutable) {
+class StaticInvoker {
+  /**
+   *
+   * @param {HaveTestExecutor} testExecutable
+   * @param {TestRun} runner
+   */
+  constructor(testExecutable, runner) {
+    /**
+     *
+     * @type {HaveTestExecutor}
+     * @private
+     */
     this.__testCase = testExecutable
+    /**
+     *
+     * @type {TestRun}
+     * @private
+     */
+    this.__runner = runner
   }
 
   /**
@@ -8,12 +24,12 @@ export class StaticInvoker {
    * @return {StaticInvoker}
    */
   invokeBeforeClass() {
-    this.__testCase.constructor.beforeClass()
+    this.__testCase.beforeClass()
     if (this.__runner.isVerbose()) {
       console.log('\x1b[36m%s\x1b[0m', `
     
 ------------------------------------------------------
-Start test case ${this.__testCase.constructor.name} `)
+Start test case ${this.__testCase.name} `)
     }
     return this
   }
@@ -23,12 +39,14 @@ Start test case ${this.__testCase.constructor.name} `)
    * @return {StaticInvoker}
    */
   invokeAfterClass() {
-    this.__testCase.constructor.afterClass()
+    this.__testCase.afterClass()
     if (this.__runner.isVerbose()) {
       console.log('\x1b[36m%s\x1b[0m', `------------------------------------------------------
-Finish test case ${this.__testCase.constructor.name} 
+Finish test case ${this.__testCase.name} 
 `)
     }
     return this
   }
 }
+
+module.exports = StaticInvoker

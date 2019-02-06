@@ -1,17 +1,37 @@
-const TestReport = require('../Report/TestReport')
 const TestExecutor = require('./TestExecutor')
+const StaticInvoker = require('./StaticInvoker')
 
 /**
  * @implements {TestExecutable}
  */
 class SingleTestExecutor extends TestExecutor {
   /**
+   *
+   * @param {TestCase} testCase
+   * @param {string} testName
+   * @param {TestRun} runner
+   */
+  constructor(testCase, testName, runner) {
+    super(testCase, testName, runner)
+    /**
+     * @type {StaticInvoker}
+     * @private
+     */
+    this.__staticInvoker = new StaticInvoker(this._testCase, runner)
+  }
+
+  /**
    * @return {TestReport}
    */
   exec() {
+    this.__staticInvoker.invokeBeforeClass()
+
     this._execTest()
-    return this
+
+    this.__staticInvoker.invokeAfterClass()
+
+    return this._report
   }
 }
 
-module.exports = TestExecutor
+module.exports = SingleTestExecutor

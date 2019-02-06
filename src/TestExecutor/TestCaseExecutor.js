@@ -1,6 +1,7 @@
 const {TEST_METHOD_PREFIX} = require('../constantes')
 const TestCaseReport = require('../Report/TestCaseReport')
 const TestExecutor = require('./TestExecutor')
+const StaticInvoker = require('./StaticInvoker')
 
 /**
  * @implements TestExecutable
@@ -29,13 +30,18 @@ class TestCaseExecutor {
      * @type {TestCaseReport}
      * @private
      */
-    this.__report = new TestCaseReport(this.__testCase.constructor.name)
+    this.__report = new TestCaseReport(this.__testCase.name)
     /**
      *
      * @type {TestRun}
      * @private
      */
     this.__runner = runner
+    /**
+     * @type {StaticInvoker}
+     * @private
+     */
+    this.__staticInvoker = new StaticInvoker(this.__testCase, this.__runner)
   }
 
   /**
@@ -43,28 +49,14 @@ class TestCaseExecutor {
    * @return {TestCaseReport}
    */
   exec() {
-    this.__invokeBeforeClass()
-      .__updateTestsList()
+    this.__staticInvoker.invokeBeforeClass()
+
+    this.__updateTestsList()
       .__updateTestCount(this.__testsList.length)
       .__runTests()
-      .__invokeAfterClass()
-    return this.__report
-  }
 
-  /**
-   *
-   * @return {TestCaseExecutor}
-   * @private
-   */
-  __invokeBeforeClass() {
-    this.__testCase.constructor.beforeClass()
-    if (this.__runner.isVerbose()) {
-      console.log('\x1b[36m%s\x1b[0m', `
-    
-------------------------------------------------------
-Start test case ${this.__testCase.constructor.name} `)
-    }
-    return this
+    this.__staticInvoker.invokeAfterClass()
+    return this.__report
   }
 
   /**
@@ -77,9 +69,13 @@ Start test case ${this.__testCase.constructor.name} `)
      * @type {Array<string>} tests
      */
     this.__testsList.forEach((v) => {
-      this.__updateReport(new TestExecutor(
-        this.__testCase, v, this.__runner)
-        .exec()
+      this.__updateReport(
+        new TestExecutor(
+          this.__testCase,
+          v,
+          this.__runner
+        )
+          .exec()
       )
     })
     return this
@@ -91,10 +87,11 @@ Start test case ${this.__testCase.constructor.name} `)
    * @private
    */
   __updateTestsList() {
-    this.__testsList.push(...this.__getInstanceMethodNames(this.__testCase)
-      .filter((v) => {
-        return v.startsWith(TEST_METHOD_PREFIX)
-      }))
+    this.__testsList
+      .push(...this.__getInstanceMethodNames(new this.__testCase())
+        .filter((v) => {
+          return v.startsWith(TEST_METHOD_PREFIX)
+        }))
     return this
   }
 
@@ -156,8 +153,6 @@ Start test case ${this.__testCase.constructor.name} `)
     const desc = Object.getOwnPropertyDescriptor(obj, name)
     return !!desc && typeof desc.value === 'function'
   }
-
-
 }
 
 module.exports = TestCaseExecutor

@@ -15,6 +15,16 @@ class TestSuite {
 
   /**
    * @static
+   * @constructor
+   * @param {TestCase} test
+   * @return {TestSuite}
+   */
+  static withTestCase(test) {
+    return new this().addTestCase(test)
+  }
+
+  /**
+   * @static
    * @param {TestSuite} testSuite
    * @param {TestRun} runner
    * @return {TestExecutable}

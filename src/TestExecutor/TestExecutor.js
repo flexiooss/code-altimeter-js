@@ -1,4 +1,5 @@
 const TestReport = require('../Report/TestReport')
+const StaticInvoker = require('./StaticInvoker')
 
 /**
  * @implements {TestExecutable}
@@ -13,28 +14,28 @@ class TestExecutor {
   constructor(testCase, testName, runner) {
     /**
      *
+     * @type {TestCase}
+     * @protected
+     */
+    this._testCase = testCase
+    /**
+     *
      * @type {string}
      * @private
      */
     this.__testName = testName
     /**
      *
-     * @type {TestCase}
-     * @private
-     */
-    this.__testCase = testCase
-    /**
-     *
-     * @type {TestReport}
-     * @private
-     */
-    this.__report = new TestReport(testName)
-    /**
-     *
      * @type {TestRun}
      * @private
      */
     this.__runner = runner
+    /**
+     *
+     * @type {TestReport}
+     * @protected
+     */
+    this._report = new TestReport(testName)
   }
 
   /**
@@ -42,7 +43,7 @@ class TestExecutor {
    */
   exec() {
     this._execTest()
-    return this
+    return this._report
   }
 
   /**
@@ -51,17 +52,22 @@ class TestExecutor {
    * @protected
    */
   _execTest() {
+    const testCase = this.__newTestCase()
+
     if (this.__runner.isVerbose()) {
       console.log(`Test  ${this.__testName}`)
     }
+
     if (this.__runner.isVerbose()) {
       console.log('\x1b[90m%s\x1b[0m', `------------------------------------
 Setup ${this.__testName} 
 `)
     }
-    this.__testCase.setUp()
+
+    testCase.setUp()
+
     try {
-      this.__testCase[this.__testName]()
+      testCase[this.__testName]()
       if (this.__runner.isVerbose()) {
         console.log('\x1b[92m%s\x1b[0m', `Test pass ${this.__testName}`)
       }
@@ -70,7 +76,7 @@ Setup ${this.__testName}
       console.log('\x1b[31m%s\x1b[0m', `
        
 ########################################        
-###### TEST FAIL      ${this.__testCase.constructor.name}:${this.__testName}
+###### TEST FAIL      ${testCase.constructor.name}:${this.__testName}
 ########################################
 `)
       console.log(e)
@@ -84,8 +90,17 @@ Setup ${this.__testName}
 tearDown ${this.__testName} 
 `)
     }
-    this.__testCase.tearDown()
-    return this.__report
+    testCase.tearDown()
+    return this._report
+  }
+
+  /**
+   *
+   * @return {TestCase}
+   * @private
+   */
+  __newTestCase() {
+    return new this._testCase()
   }
 
   /**
@@ -94,7 +109,7 @@ tearDown ${this.__testName}
    * @private
    */
   __incrementTestPass() {
-    this.__report.testPass++
+    this._report.testPass++
     return this
   }
 
@@ -104,7 +119,7 @@ tearDown ${this.__testName}
    * @private
    */
   __incrementTestFail() {
-    this.__report.testFail++
+    this._report.testFail++
     return this
   }
 }
