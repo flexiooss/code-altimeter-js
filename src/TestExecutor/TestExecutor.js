@@ -1,4 +1,5 @@
 const TestReport = require('../Report/TestReport')
+
 /**
  * @implements {TestExecutable}
  */
@@ -35,10 +36,21 @@ class TestExecutor {
      */
     this.__runner = runner
   }
+
   /**
    * @return {TestReport}
    */
   exec() {
+    this._execTest()
+    return this
+  }
+
+  /**
+   *
+   * @return {TestReport}
+   * @protected
+   */
+  _execTest() {
     if (this.__runner.isVerbose()) {
       console.log(`Test  ${this.__testName}`)
     }

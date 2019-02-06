@@ -157,20 +157,7 @@ Start test case ${this.__testCase.constructor.name} `)
     return !!desc && typeof desc.value === 'function'
   }
 
-  /**
-   *
-   * @return {TestCaseExecutor}
-   * @private
-   */
-  __invokeAfterClass() {
-    this.__testCase.constructor.afterClass()
-    if (this.__runner.isVerbose()) {
-      console.log('\x1b[36m%s\x1b[0m', `------------------------------------------------------
-Finish test case ${this.__testCase.constructor.name} 
-`)
-    }
-    return this
-  }
+
 }
 
 module.exports = TestCaseExecutor
