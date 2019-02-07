@@ -4,14 +4,21 @@ class Reporter {
   /**
    *
    * @param {Report} report
+   * @param {TestRun} runner
    */
-  constructor(report) {
+  constructor(report, runner) {
     /**
      *
      * @type {Report}
      * @private
      */
     this.__report = report
+    /**
+     *
+     * @type {TestRun}
+     * @private
+     */
+    this.__runner = runner
   }
 
   /**
@@ -24,12 +31,11 @@ class Reporter {
   }
 
   show() {
-    console.log('\x1b[46m%s\x1b[0m',`
+    console.log('\x1b[46m%s\x1b[0m', `
     
-   ############ 
-  #  REPORT  # 
- ############ 
-
+       ################## 
+      #  TESTS REPORT  # 
+     ################## 
 `)
     this.__report.logReport()
     this.__illustrate()
@@ -43,8 +49,9 @@ class Reporter {
    * @private
    */
   __illustrate() {
-    if (this.__report.failed()) {
-      console.log('\x1b[31m%s\x1b[0m', `88888888888888888888888  TEST FAIL  888888888888888888888888   
+    if (this.__runner.isVerbose()) {
+      if (this.__report.failed()) {
+        console.log('\x1b[31m%s\x1b[0m', `88888888888888888888888  TEST FAIL  888888888888888888888888   
 888888888888888888888888888888888888888888888888888888888888
 888888888888888888888888888888888888888888888888888888888888
 8888888888888888888888888P""  ""9888888888888888888888888888
@@ -61,8 +68,8 @@ class Reporter {
 888888888888888888888888888888888888888888888888888888888888
 
 `)
-    } else {
-      console.log('\x1b[92m%s\x1b[0m', `
+      } else {
+        console.log('\x1b[92m%s\x1b[0m', `
            |
         __| |__ 
       (=========)
@@ -89,6 +96,7 @@ class Reporter {
  (~~~)           (~~~)
  
  `)
+      }
     }
     return this
   }

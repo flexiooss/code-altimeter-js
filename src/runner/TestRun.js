@@ -32,7 +32,7 @@ class TestRun {
      * @type {Reporter}
      * @private
      */
-    this.__reporter = new Reporter(this.__reportContainer.testRunReport)
+    this.__reporter = new Reporter(this.__reportContainer.testRunReport, this)
   }
 
   /**
@@ -47,7 +47,8 @@ class TestRun {
   }
 
   welcome() {
-    console.log(`
+    if (this.isVerbose()) {
+      console.log(`
 ###########################################################################
 ###########################################################################
 
@@ -61,6 +62,7 @@ class TestRun {
   by Flexio
 ###########################################################################
 `)
+    }
   }
 
   /**
