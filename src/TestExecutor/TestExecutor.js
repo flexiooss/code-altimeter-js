@@ -68,23 +68,14 @@ Setup ${this.__testName}
 
     try {
       testCase[this.__testName]()
-      if (this.__runner.isVerbose()) {
-        console.log('\x1b[92m%s\x1b[0m', `Test pass ${this.__testName}`)
-      }
+
+      this.__logPass(testCase)
       this.__incrementTestPass()
     } catch (e) {
-      console.log('\x1b[31m%s\x1b[0m', `
-       
-########################################        
-###### TEST FAIL      ${testCase.constructor.name}:${this.__testName}
-########################################
-`)
-      console.log(e)
-      console.log('\x1b[31m%s\x1b[0m', `
-########################################
-`)
+      this.__logError(testCase, e)
       this.__incrementTestFail()
     }
+
     if (this.__runner.isVerbose()) {
       console.log('\x1b[90m%s\x1b[0m', `------------------------------
 tearDown ${this.__testName} 
@@ -92,6 +83,34 @@ tearDown ${this.__testName}
     }
     testCase.tearDown()
     return this._report
+  }
+
+  /**
+   *
+   * @param {TestCase} testCase
+   * @private
+   */
+  __logPass(testCase) {
+    console.log('\x1b[92m%s\x1b[0m', `⛱   PASS ${this.__testName}`)
+  }
+
+  /**
+   *
+   * @param {TestCase} testCase
+   * @param {Error} error
+   * @private
+   */
+  __logError(testCase, error) {
+    console.log('\x1b[31m%s\x1b[0m', `
+       
+########################################        
+###### ⛑ TEST FAIL      ${testCase.constructor.name}:${this.__testName}
+########################################
+`)
+    console.log(error)
+    console.log('\x1b[31m%s\x1b[0m', `
+########################################
+`)
   }
 
   /**

@@ -37,7 +37,7 @@ function fileWalker(dir, done) {
   })
 }
 
-const regexpEntryFile = new RegExp('.*index\.js$')
+const regexpEntryFile = new RegExp('.*\.test\.js$')
 const regexpDirTest = new RegExp('.*/__tests__/.*')
 const regexpNodesModules = new RegExp('.*/node_modules/.*')
 /**

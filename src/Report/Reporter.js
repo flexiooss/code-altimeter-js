@@ -31,7 +31,8 @@ class Reporter {
   }
 
   show() {
-    console.log('\x1b[46m%s\x1b[0m', `
+    console.log('\x1b[46m%s\x1b[0m',
+      `
     
        ################## 
       #  TESTS REPORT  # 
@@ -106,7 +107,7 @@ class Reporter {
    */
   throw() {
     if (this.__report.failed()) {
-      throw new TestError('TEST FAILED')
+      throw new TestError('TEST FAILED : AHHHHHHHHHHHHHHHHHHHHHHHH !!! ')
     }
   }
 }

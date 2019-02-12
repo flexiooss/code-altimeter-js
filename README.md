@@ -7,7 +7,7 @@
 code-altimeter is detached from any library of assertions
 
 ### Project structure
-- `__tests__` directory : the tests entries point files are into all ***\_\_tests\_\_/index.js*** files
+- `__tests__` directory : the tests entries point files are into all ***\_\_tests\_\_/*.test.js*** files
 - Test entry methods must be prefixed with 'test' like : `testMyFeature()`
 
 ```
@@ -16,14 +16,13 @@ code-altimeter is detached from any library of assertions
 -src
     |
     -__tests__
-    -index.js
-    -test1.js
-    -test2.js
+    -test1.test.js
+    -test2.test.js
     -...
 ```
 
 ### Simple example
-> index.js file
+> myTest.test.js file
 ```javascript
 import {TestCase} from 'code-altimeter-js'
 const assert = require('assert')
@@ -36,7 +35,7 @@ class MyTest extends TestCase {
 
 }
 
-TestRun(MyTest)
+runTest(MyTest)
 ```
 
 
@@ -58,7 +57,7 @@ yarn test -v
 ```
 
 ### Advanced example
-> index.js file
+> index.test.js file
 ```javascript
 import {TestSuite} from 'code-altimeter-js'
 import {MyTest} from './MyTest'
@@ -107,7 +106,7 @@ console.log('Executed after all tests from this TestCase')  }
 export {MyTest}
 ```
 ### Use executable import
-> index.js file
+> index.test.js file
 ```javascript
 import './MyTest'
 ```
@@ -117,7 +116,7 @@ import './MyTest'
 import {TestCase} from 'code-altimeter-js'
 const assert = require('assert')
 
-class MyTest extends TestCase {
+export class MyTest extends TestCase {
 
   testHappy() {
     assert(true, "Oups I did'nt break again")
@@ -125,5 +124,5 @@ class MyTest extends TestCase {
 
 }
 
-export {MyTest}
+runTest(MyTest)
 ```
