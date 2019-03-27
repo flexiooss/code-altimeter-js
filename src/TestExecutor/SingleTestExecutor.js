@@ -14,7 +14,7 @@ class SingleTestExecutor extends TestExecutor {
   constructor(testCase, testName, runner) {
     super(testCase, testName, runner)
     /**
-     * @type {StaticInvoker}
+     * @params {StaticInvoker}
      * @private
      */
     this.__staticInvoker = new StaticInvoker(this._testCase, runner)

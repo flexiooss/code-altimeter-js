@@ -16,20 +16,20 @@ class TestSuiteExecutor {
   constructor(testSuite, runner) {
     /**
      *
-     * @type {TestSuite}
+     * @params {TestSuite}
      * @private
      */
     this.__testSuite = testSuite
 
     /**
      *
-     * @type {TestSuiteReport}
+     * @params {TestSuiteReport}
      * @private
      */
     this.__report = new TestSuiteReport(this.__testSuite.constructor.name)
     /**
      *
-     * @type {TestRun}
+     * @params {TestRun}
      * @private
      */
     this.__runner = runner

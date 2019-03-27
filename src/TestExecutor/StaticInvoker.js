@@ -7,13 +7,13 @@ class StaticInvoker {
   constructor(testExecutable, runner) {
     /**
      *
-     * @type {HaveTestExecutor}
+     * @params {HaveTestExecutor}
      * @private
      */
     this.__testCase = testExecutable
     /**
      *
-     * @type {TestRun}
+     * @params {TestRun}
      * @private
      */
     this.__runner = runner

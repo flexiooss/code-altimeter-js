@@ -9,13 +9,13 @@ class Reporter {
   constructor(report, runner) {
     /**
      *
-     * @type {Report}
+     * @params {Report}
      * @private
      */
     this.__report = report
     /**
      *
-     * @type {TestRun}
+     * @params {TestRun}
      * @private
      */
     this.__runner = runner

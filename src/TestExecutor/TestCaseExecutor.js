@@ -15,30 +15,30 @@ class TestCaseExecutor {
   constructor(testCase, runner) {
     /**
      *
-     * @type {TestCase}
+     * @params {TestCase}
      * @private
      */
     this.__testCase = testCase
     /**
      *
-     * @type {Array<string>}
+     * @params {Array<string>}
      * @private
      */
     this.__testsList = []
     /**
      *
-     * @type {TestCaseReport}
+     * @params {TestCaseReport}
      * @private
      */
     this.__report = new TestCaseReport(this.__testCase.name)
     /**
      *
-     * @type {TestRun}
+     * @params {TestRun}
      * @private
      */
     this.__runner = runner
     /**
-     * @type {StaticInvoker}
+     * @params {StaticInvoker}
      * @private
      */
     this.__staticInvoker = new StaticInvoker(this.__testCase, this.__runner)
@@ -66,7 +66,7 @@ class TestCaseExecutor {
    */
   __runTests() {
     /**
-     * @type {Array<string>} tests
+     * @params {Array<string>} tests
      */
     this.__testsList.forEach((v) => {
       this.__updateReport(

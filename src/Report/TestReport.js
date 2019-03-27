@@ -1,6 +1,6 @@
 /**
  * @implements {Report}
- * @type {TestReport}
+ * @params {TestReport}
  */
 class TestReport {
   /**
@@ -10,19 +10,19 @@ class TestReport {
   constructor(name) {
     /**
      *
-     * @type {string}
+     * @params {string}
      * @private
      */
     this.__name = name
 
     /**
      *
-     * @type {number}
+     * @params {number}
      */
     this.testFail = 0
     /**
      *
-     * @type {number}
+     * @params {number}
      */
     this.testPass = 0
   }

@@ -14,17 +14,17 @@ class TestRunReport extends TestSuiteReport {
     super(name)
     /**
      *
-     * @type {number}
+     * @params {number}
      */
     this.testSuiteCount = 0
     /**
      *
-     * @type {number}
+     * @params {number}
      */
     this.testSuiteFail = 0
     /**
      *
-     * @type {number}
+     * @params {number}
      */
     this.testSuitePass = 0
   }

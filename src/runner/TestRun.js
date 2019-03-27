@@ -11,25 +11,25 @@ class TestRun {
   constructor(reportContainer) {
     /**
      *
-     * @type {Array<{test: HaveTestExecutor,testName: ?string}>}
+     * @params {Array<{test: HaveTestExecutor,testName: ?string}>}
      * @private
      */
     this.__testable = []
     /**
      *
-     * @type {ReportContainer}
+     * @params {ReportContainer}
      * @private
      */
     this.__reportContainer = reportContainer
     /**
      *
-     * @type {boolean}
+     * @params {boolean}
      * @private
      */
     this.__verbose = false
     /**
      *
-     * @type {Reporter}
+     * @params {Reporter}
      * @private
      */
     this.__reporter = new Reporter(this.__reportContainer.testRunReport, this)
@@ -73,7 +73,7 @@ class TestRun {
     this.__testable.forEach((testDescription) => {
       /**
        *
-       * @type {Report}
+       * @params {Report}
        */
       this.__addReport(
         TestExecutorBuilder

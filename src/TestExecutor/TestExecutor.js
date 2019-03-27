@@ -14,25 +14,25 @@ class TestExecutor {
   constructor(testCase, testName, runner) {
     /**
      *
-     * @type {TestCase}
+     * @params {TestCase}
      * @protected
      */
     this._testCase = testCase
     /**
      *
-     * @type {string}
+     * @params {string}
      * @private
      */
     this.__testName = testName
     /**
      *
-     * @type {TestRun}
+     * @params {TestRun}
      * @private
      */
     this.__runner = runner
     /**
      *
-     * @type {TestReport}
+     * @params {TestReport}
      * @protected
      */
     this._report = new TestReport(testName)

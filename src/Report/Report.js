@@ -1,6 +1,6 @@
 /**
  * @interface
- * @type {Report}
+ * @params {Report}
  */
 class Report {
   /**

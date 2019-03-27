@@ -10,25 +10,25 @@ class ReportContainer {
   constructor(testRunReport) {
     /**
      *
-     * @type {Array<TestReport>}
+     * @params {Array<TestReport>}
      * @private
      */
     this.__testReport = []
     /**
      *
-     * @type {Array<TestCaseReport>}
+     * @params {Array<TestCaseReport>}
      * @private
      */
     this.__testCaseReport = []
     /**
      *
-     * @type {Array<TestSuiteReport>}
+     * @params {Array<TestSuiteReport>}
      * @private
      */
     this.__testSuiteReport = []
     /**
      *
-     * @type {TestRunReport}
+     * @params {TestRunReport}
      * @private
      */
     this.__testRunReport = testRunReport

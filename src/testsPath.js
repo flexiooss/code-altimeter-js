@@ -59,7 +59,7 @@ module.exports = function(path, clb) {
     }
 
     const ret = (data.filter((v) => {
-      return !regexpNodesModules.test(v) && regexpDirTest.test(v) && regexpEntryFile.test(v)
+      return !regexpNodesModules.test(v) && regexpEntryFile.test(v)
     }))
     clb(ret)
   }

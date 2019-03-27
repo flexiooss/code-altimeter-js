@@ -2,7 +2,7 @@ const TestReport = require('./TestReport')
 
 /**
  * @implements {Report}
- * @type {TestCaseReport}
+ * @params {TestCaseReport}
  */
 class TestCaseReport extends TestReport {
   /**
@@ -14,7 +14,7 @@ class TestCaseReport extends TestReport {
 
     /**
      *
-     * @type {number}
+     * @params {number}
      */
     this.testCount = 0
   }

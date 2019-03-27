@@ -8,7 +8,7 @@ const TestCaseReport = require('./TestCaseReport')
  *
  * @implements {Report}
  * @extends {TestCaseReport}
- * @type {TestSuiteReport}
+ * @params {TestSuiteReport}
  */
 class TestSuiteReport extends TestCaseReport {
   /**
@@ -19,17 +19,17 @@ class TestSuiteReport extends TestCaseReport {
     super(name)
     /**
      *
-     * @type {number}
+     * @params {number}
      */
     this.testCaseCount = 0
     /**
      *
-     * @type {number}
+     * @params {number}
      */
     this.testCaseFail = 0
     /**
      *
-     * @type {number}
+     * @params {number}
      */
     this.testCasePass = 0
   }

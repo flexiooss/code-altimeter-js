@@ -7,7 +7,7 @@ class TestSuite {
   constructor() {
     /**
      *
-     * @type {Array<TestCase>}
+     * @params {Array<TestCase>}
      * @private
      */
     this.__test = []
