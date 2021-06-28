@@ -11,6 +11,5 @@
     "hotballoon-shed:dev": "yarn hotballoon-shed --operation=development -v"
   },
   "devDependencies": {},
-  "dependencies": {
-  }
+  "dependencies": {}
 }
