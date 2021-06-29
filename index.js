@@ -6,8 +6,8 @@ const TestError = require('./src/js/runner/TestError')
 const testsPath = require('./src/js/testsPath')
 const runTest = require('./src/js/runner/TestRun')
 const TestCaseExecutor = require('./src/js/TestExecutor/TestCaseExecutor')
-const before = path.resolve(__dirname, './src/entries/before.js')
-const after = path.resolve(__dirname, './src/entries/after.js')
+const before = path.resolve(__dirname, './src/js/entries/before.js')
+const after = path.resolve(__dirname, './src/js/entries/after.js')
 
 module.exports = {
   runTest: runTest,
