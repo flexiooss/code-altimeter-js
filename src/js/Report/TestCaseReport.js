@@ -6,21 +6,18 @@ const TestReport = require('./TestReport')
  */
 class TestCaseReport extends TestReport {
   /**
-   *
    * @param {string} name
    */
   constructor(name) {
     super(name)
 
     /**
-     *
      * @params {number}
      */
     this.testCount = 0
   }
 
   /**
-   *
    * @param {number} n
    * @return {TestCaseReport}
    */
@@ -42,6 +39,13 @@ class TestCaseReport extends TestReport {
       console.log('\x1b[102m\x1b[30m%s\x1b[0m', ` Tests Pass : ${this.testPass} / ${this.testCount} `)
     }
     return this
+  }
+
+  /**
+   * @return {boolean}
+   */
+  failed() {
+    return this.testCaseFail > 0 || this.testFail > 0
   }
 }
 

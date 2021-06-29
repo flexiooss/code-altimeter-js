@@ -14,22 +14,22 @@ class TestExecutor {
   constructor(testCase, testName, runner) {
     /**
      *
-     * @params {TestCase}
+     * @params {Class<TestCase>}
      * @protected
      */
     this._testCase = testCase
     /**
      *
      * @params {string}
-     * @private
+     * @protected
      */
-    this.__testName = testName
+    this._testName = testName
     /**
      *
      * @params {TestRun}
-     * @private
+     * @protected
      */
-    this.__runner = runner
+    this._runner = runner
     /**
      *
      * @params {TestReport}
@@ -39,46 +39,47 @@ class TestExecutor {
   }
 
   /**
-   * @return {TestReport}
+   * @return {Promise<Report>}
    */
-  exec() {
-    this._execTest()
-    return this._report
+  async exec() {
+    await this._execTest()
+    return new Promise(resolve => {
+      resolve(this._report)
+    })
   }
 
   /**
-   *
    * @return {TestReport}
    * @protected
    */
-  _execTest() {
-    const testCase = this.__newTestCase()
+   async _execTest() {
+    const testCase = this._newTestCase()
 
-    if (this.__runner.isVerbose()) {
-      console.log(`Test  ${this.__testName}`)
+    if (this._runner.isVerbose()) {
+      console.log(`Test  ${this._testName}`)
     }
 
-    if (this.__runner.isVerbose()) {
+    if (this._runner.isVerbose()) {
       console.log('\x1b[90m%s\x1b[0m', `------------------------------------
-Setup ${this.__testName} 
+Setup ${this._testName} 
 `)
     }
 
     testCase.setUp()
 
     try {
-      testCase[this.__testName]()
+      testCase[this._testName]()
 
-      this.__logPass(testCase)
-      this.__incrementTestPass()
+      this._logPass(testCase)
+      this._incrementTestPass()
     } catch (e) {
-      this.__logError(testCase, e)
-      this.__incrementTestFail()
+      this._logError(testCase, e)
+      this._incrementTestFail()
     }
 
-    if (this.__runner.isVerbose()) {
+    if (this._runner.isVerbose()) {
       console.log('\x1b[90m%s\x1b[0m', `------------------------------
-tearDown ${this.__testName} 
+tearDown ${this._testName} 
 `)
     }
     testCase.tearDown()
@@ -86,58 +87,54 @@ tearDown ${this.__testName}
   }
 
   /**
-   *
    * @param {TestCase} testCase
-   * @private
+   * @protected
    */
-  __logPass(testCase) {
-    console.log('\x1b[92m%s\x1b[0m', `⛱   PASS ${this.__testName}`)
+  _logPass(testCase) {
+    console.log('\x1b[92m%s\x1b[0m', `⛱   PASS ${this._testName}`)
   }
 
   /**
    *
    * @param {TestCase} testCase
    * @param {Error} error
-   * @private
+   * @protected
    */
-  __logError(testCase, error) {
-    console.log('\x1b[31m%s\x1b[0m', `
+  _logError(testCase, error) {
+    console.error('\x1b[31m%s\x1b[0m', `
        
 ########################################        
-###### ⛑ TEST FAIL      ${testCase.constructor.name}:${this.__testName}
+###### ⛑ TEST FAIL      ${testCase.constructor.name}:${this._testName}
 ########################################
 `)
-    console.log(error)
-    console.log('\x1b[31m%s\x1b[0m', `
+    console.error(error)
+    console.error('\x1b[31m%s\x1b[0m', `
 ########################################
 `)
   }
 
   /**
-   *
    * @return {TestCase}
-   * @private
+   * @protected
    */
-  __newTestCase() {
+  _newTestCase() {
     return new this._testCase()
   }
 
   /**
-   *
    * @return {TestExecutor}
-   * @private
+   * @protected
    */
-  __incrementTestPass() {
+  _incrementTestPass() {
     this._report.testPass++
     return this
   }
 
   /**
-   *
    * @return {TestExecutor}
-   * @private
+   * @protected
    */
-  __incrementTestFail() {
+  _incrementTestFail() {
     this._report.testFail++
     return this
   }

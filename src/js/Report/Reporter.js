@@ -40,7 +40,7 @@ class Reporter {
 `)
     this.__report.logReport()
     this.__illustrate()
-      .throw()
+      .ensureThrow()
     return this
   }
 
@@ -105,9 +105,9 @@ class Reporter {
   /**
    * @throws TestError
    */
-  throw() {
+  ensureThrow() {
     if (this.__report.failed()) {
-      throw new TestError('TEST FAILED : AHHHHHHHHHHHHHHHHHHHHHHHH !!! ')
+      throw new TestError('TEST FAILED !!!')
     }
   }
 }

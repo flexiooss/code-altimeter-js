@@ -1,11 +1,11 @@
 /* global require */
 const path = require('path')
-const TestCase = require('./src/Testable/TestCase')
-const TestSuite = require('./src/Testable/TestSuite')
-const TestError = require('./src/runner/TestError')
-const testsPath = require('./src/testsPath')
-const runTest = require('./src/runner/TestRun')
-const TestCaseExecutor = require('./src/TestExecutor/TestCaseExecutor')
+const TestCase = require('./src/js/Testable/TestCase')
+const TestSuite = require('./src/js/Testable/TestSuite')
+const TestError = require('./src/js/runner/TestError')
+const testsPath = require('./src/js/testsPath')
+const runTest = require('./src/js/runner/TestRun')
+const TestCaseExecutor = require('./src/js/TestExecutor/TestCaseExecutor')
 const before = path.resolve(__dirname, './src/entries/before.js')
 const after = path.resolve(__dirname, './src/entries/after.js')
 

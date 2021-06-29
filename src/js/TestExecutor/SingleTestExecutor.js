@@ -21,16 +21,18 @@ class SingleTestExecutor extends TestExecutor {
   }
 
   /**
-   * @return {TestReport}
+   * @return {Promise<Report>}
    */
-  exec() {
+  async exec() {
     this.__staticInvoker.invokeBeforeClass()
 
-    this._execTest()
+    await this._execTest()
 
     this.__staticInvoker.invokeAfterClass()
 
-    return this._report
+    return new Promise(resolve => {
+      resolve(this._report)
+    })
   }
 }
 
