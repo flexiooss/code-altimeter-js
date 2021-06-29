@@ -38,13 +38,12 @@ Setup ${this._testName}
       testCase.setUp()
 
       try {
-        testCase[this._testName].call(null)
+        testCase[this._testName].call(testCase)
           .then(() => {
             this._logPass(testCase)
             this._incrementTestPass()
           })
           .catch((e) => {
-            console.log(1)
             this._logError(testCase, e)
             this._incrementTestFail()
           })
@@ -58,8 +57,6 @@ tearDown ${this._testName}
             resolve(this._report)
           })
       } catch (e) {
-        console.log(2)
-
         this._logError(testCase, e)
         this._incrementTestFail()
         if (this._runner.isVerbose()) {
