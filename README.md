@@ -11,6 +11,10 @@ code-altimeter is detached from any library of assertions
 - Test entry methods must be prefixed with 'test' like : `testMyFeature()`
 - Async Test entry methods must be prefixed with 'asyncTest' like : `asyncTestMyFeature()`
 
+## Examples
+> see `src/test/tester.js`
+> see `src/test/cases/*`
+
 ### Simple example
 > myTest.test.js file
 ```javascript
