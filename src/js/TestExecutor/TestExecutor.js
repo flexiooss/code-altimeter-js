@@ -68,7 +68,7 @@ Setup ${this._testName}
     testCase.setUp()
 
     try {
-      testCase[this._testName]()
+      testCase[this._testName].call(testCase)
 
       this._logPass(testCase)
       this._incrementTestPass()
