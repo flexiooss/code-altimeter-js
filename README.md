@@ -7,19 +7,9 @@
 code-altimeter is detached from any library of assertions
 
 ### Project structure
-- `__tests__` directory : the tests entries point files are into all ***\_\_tests\_\_/*.test.js*** files
-- Test entry methods must be prefixed with 'test' like : `testMyFeature()`
 
-```
--index.js
--package.json
--src
-    |
-    -__tests__
-    -test1.test.js
-    -test2.test.js
-    -...
-```
+- Test entry methods must be prefixed with 'test' like : `testMyFeature()`
+- Async Test entry methods must be prefixed with 'asyncTest' like : `asyncTestMyFeature()`
 
 ### Simple example
 > myTest.test.js file
@@ -33,27 +23,18 @@ class MyTest extends TestCase {
     assert(false, "Oups it's broken")
   }
 
+  async asyncTestWhoFail2() {
+    return new Promise((resolve, reject) => {
+      setTimeout(()=>{
+        reject('Oups it\'s broken too')
+      },2000)
+
+    })
+  }
+
 }
 
 runTest(MyTest)
-```
-
-
-### Installation tips
-> package.json file
-```json
-{
-"scripts": {
-    "hotballoon-shed": "node ./node_modules/hotballoon-shed",
-    "test": "yarn hotballoon-shed --test"
-  }
-}
-```
-
-for usage :
-```bash
-yarn test
-yarn test -v
 ```
 
 ### Advanced example
@@ -104,25 +85,4 @@ console.log('Executed after all tests from this TestCase')  }
 }
 
 export {MyTest}
-```
-### Use executable import
-> index.test.js file
-```javascript
-import './MyTest'
-```
-
-> MyTest.js
-```javascript
-import {TestCase} from 'code-altimeter-js'
-const assert = require('assert')
-
-export class MyTest extends TestCase {
-
-  testHappy() {
-    assert(true, "Oups I did'nt break again")
-  }
-
-}
-
-runTest(MyTest)
 ```

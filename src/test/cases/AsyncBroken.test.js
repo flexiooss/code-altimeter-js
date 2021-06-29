@@ -3,6 +3,7 @@ const assert = require('assert')
 
 class AsyncBrokenTest extends lib.TestCase {
 
+
   async asyncTestWhoFail() {
     assert(false, 'Oups it\'s broken 1')
   }
