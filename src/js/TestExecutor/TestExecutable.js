@@ -3,9 +3,9 @@
  */
 class TestExecutable {
   /**
-   * @return {Report}
+   * @return {Promise<Report>}
    */
-  exec() {
+  async exec() {
     throw Error('should be override')
   }
 }

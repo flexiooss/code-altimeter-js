@@ -6,9 +6,7 @@
   "repository": "git@github.com:flexiooss/code-altimeter-js.git",
   "author": "Thomas Chatelain (https://github.com/TomAchT)",
   "scripts": {
-    "hotballoon-shed": "node ./node_modules/hotballoon-shed",
-    "hotballoon-shed:prod": "yarn hotballoon-shed --operation=production",
-    "hotballoon-shed:dev": "yarn hotballoon-shed --operation=development -v"
+    "test": "node ./src/test/tester.js"
   },
   "devDependencies": {},
   "dependencies": {}

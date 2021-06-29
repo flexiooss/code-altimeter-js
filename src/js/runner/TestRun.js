@@ -5,30 +5,25 @@ const ReportContainer = require('../Report/ReportContainer')
 
 class TestRun {
   /**
-   *
    * @param {ReportContainer} reportContainer
    */
   constructor(reportContainer) {
     /**
-     *
      * @params {Array<{test: HaveTestExecutor,testName: ?string}>}
      * @private
      */
     this.__testable = []
     /**
-     *
      * @params {ReportContainer}
      * @private
      */
     this.__reportContainer = reportContainer
     /**
-     *
      * @params {boolean}
      * @private
      */
     this.__verbose = false
     /**
-     *
      * @params {Reporter}
      * @private
      */
@@ -36,7 +31,6 @@ class TestRun {
   }
 
   /**
-   *
    * @param {HaveTestExecutor} test
    * @param {?string} testName
    * @return {TestRun}
@@ -67,25 +61,27 @@ class TestRun {
 
   /**
    *
-   * @return {TestRun}
+   * @return {Promise<TestRun>}
    */
-  start() {
-    this.__testable.forEach((testDescription) => {
-      /**
-       *
-       * @params {Report}
-       */
-      this.__addReport(
-        TestExecutorBuilder
-          .build(testDescription, this)
-          .exec()
-      )
-    })
-    return this
+  async run() {
+    return new Promise(resolve => {
+
+        Promise.all(this.__testable.map(async(testDescription) => {
+          return TestExecutorBuilder
+            .build(testDescription, this)
+            .exec()
+        })).then(values => {
+          values.forEach((report) => {
+            this.__addReport(report)
+          })
+
+          resolve(this)
+        })
+      }
+    )
   }
 
   /**
-   *
    * @param {Report} report
    * @private
    * @return {TestRun}
@@ -96,7 +92,6 @@ class TestRun {
   }
 
   /**
-   *
    * @param {boolean} v
    * @return {TestRun}
    */
@@ -106,7 +101,6 @@ class TestRun {
   }
 
   /**
-   *
    * @return {boolean}
    */
   isVerbose() {
@@ -114,7 +108,6 @@ class TestRun {
   }
 
   /**
-   *
    * @param {ReportContainer} reportContainer
    * @return {TestRun}
    */
@@ -124,7 +117,6 @@ class TestRun {
   }
 
   /**
-   *
    * @return {?Reporter}
    */
   get reportContainer() {
@@ -147,10 +139,10 @@ class TestRun {
    * @throws {TestError}
    * @return {TestRun}
    */
-  throw() {
+  ensureThrow() {
     this
       .__reporter
-      .throw()
+      .ensureThrow()
     return this
   }
 }

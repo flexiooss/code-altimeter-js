@@ -36,16 +36,17 @@ class TestSuiteExecutor {
   }
 
   /**
-   *
-   * @return {TestSuiteReport}
+   * @return {Promise<Report>}
    */
-  exec() {
+  async exec() {
     this
       .__startTestSuite()
       .__updateTestCaseCount()
       .__runAllTestCase()
       .__finishTestSuite()
-    return this.__report
+    return new Promise(resolve => {
+      resolve(this.__report)
+    })
   }
 
   /**

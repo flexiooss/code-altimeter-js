@@ -69,7 +69,6 @@ class TestReport {
   }
 
   /**
-   *
    * @return {boolean}
    */
   failed() {

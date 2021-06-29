@@ -1,6 +1,7 @@
-const {TEST_METHOD_PREFIX} = require('../constantes')
+const {TEST_METHOD_PREFIX, ASYNC_TEST_METHOD_PREFIX} = require('../constantes')
 const TestCaseReport = require('../Report/TestCaseReport')
 const TestExecutor = require('./TestExecutor')
+const AsyncTestExecutor = require('./AsyncTestExecutor')
 const StaticInvoker = require('./StaticInvoker')
 
 /**
@@ -27,6 +28,12 @@ class TestCaseExecutor {
     this.__testsList = []
     /**
      *
+     * @params {Array<string>}
+     * @private
+     */
+    this.__asyncTestsList = []
+    /**
+     *
      * @params {TestCaseReport}
      * @private
      */
@@ -45,44 +52,58 @@ class TestCaseExecutor {
   }
 
   /**
-   *
-   * @return {TestCaseReport}
+   * @return {Promise<unknown>}
    */
-  exec() {
+  async exec() {
     this.__staticInvoker.invokeBeforeClass()
 
-    this.__updateTestsList()
+    await this.__updateTestsList()
       .__updateTestCount(this.__testsList.length)
       .__runTests()
 
     this.__staticInvoker.invokeAfterClass()
-    return this.__report
+
+    return new Promise(resolve => {
+      resolve(this.__report)
+    })
   }
 
   /**
-   *
-   * @return {TestCaseExecutor}
+   * @return {Promise<Report[][]>}
    * @private
    */
   __runTests() {
-    /**
-     * @params {Array<string>} tests
-     */
-    this.__testsList.forEach((v) => {
-      this.__updateReport(
-        new TestExecutor(
+    return Promise.all(
+      [
+
+        Promise.all(this.__testsList.map((v) => new TestExecutor(
           this.__testCase,
           v,
           this.__runner
-        )
-          .exec()
-      )
-    })
-    return this
+          )
+            .exec()
+        )).then((reports) => {
+          reports.forEach(report => {
+            this.__updateReport(report)
+          })
+        })
+        ,
+        Promise.all(this.__asyncTestsList.map((v) => new AsyncTestExecutor(
+          this.__testCase,
+          v,
+          this.__runner
+          )
+            .exec()
+        )).then((reports) => {
+          reports.forEach(report => {
+            this.__updateReport(report)
+          })
+        })
+      ]
+    )
   }
 
   /**
-   *
    * @return {TestCaseExecutor}
    * @private
    */
@@ -92,6 +113,13 @@ class TestCaseExecutor {
         .filter((v) => {
           return v.startsWith(TEST_METHOD_PREFIX)
         }))
+
+    this.__asyncTestsList
+      .push(...this.__getInstanceMethodNames(new this.__testCase())
+        .filter((v) => {
+          return v.startsWith(ASYNC_TEST_METHOD_PREFIX)
+        }))
+
     return this
   }
 
@@ -108,7 +136,7 @@ class TestCaseExecutor {
 
   /**
    *
-   * @param {TestReport} testReport
+   * @param {Report} testReport
    * @return {TestCaseExecutor}
    * @private
    */
@@ -143,7 +171,6 @@ class TestCaseExecutor {
   }
 
   /**
-   *
    * @param {Object} obj
    * @param {string} name
    * @return {boolean}
