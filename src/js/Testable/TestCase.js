@@ -2,8 +2,13 @@ const TestCaseExecutor = require('../TestExecutor/TestCaseExecutor')
 
 /**
  * @implements {HaveTestExecutor}
+ * @abstract
  */
 class TestCase {
+  /**
+   * @type {boolean}
+   */
+  debug = false
   /**
    * @static
    * @param {TestCase} testCase
@@ -24,6 +29,20 @@ class TestCase {
   }
 
   tearDown() {
+  }
+
+  /**
+   * @param {*} v
+   */
+  log(v) {
+    if (this.debug) {
+      const prefix = `${new Date().toJSON()} [DEBUG]:  `
+      if (typeof v === 'undefined') {
+        console.log(`${prefix}[undefined]`)
+      } else {
+        console.log(`${prefix}${((v && typeof v === 'object') ? `[${v.constructor.name}${((Array.isArray(v) || v instanceof Array) ? `:${v.length}` : '')}]` : '')}${JSON.stringify(v, null, 2)}`)
+      }
+    }
   }
 }
 

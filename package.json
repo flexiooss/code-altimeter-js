@@ -1,6 +1,6 @@
 {
-  "name": "code-altimeter-js",
-  "version": "1.1.2",
+  "name": "@flexio-oss/code-altimeter-js",
+  "version": "1.2.0",
   "main": "index.js",
   "module": "index.es.js",
   "repository": "git@github.com:flexiooss/code-altimeter-js.git",
@@ -8,6 +8,7 @@
   "scripts": {
     "test": "node ./src/test/tester.js"
   },
+  "hotballoon-shed": {},
   "devDependencies": {},
   "dependencies": {}
 }
