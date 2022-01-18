@@ -33,10 +33,11 @@ class TestCase {
 
   /**
    * @param {*} v
+   * @param {?string} [message=null]
    */
-  log(v) {
+  log(v, message=null) {
     if (this.debug) {
-      const prefix = `${new Date().toJSON()} [DEBUG]:  `
+      const prefix = `${new Date().toJSON()} [DEBUG] ${message !==null ? message : '' }:  `
       if (typeof v === 'undefined') {
         console.log(`${prefix}[undefined]`)
       } else {
