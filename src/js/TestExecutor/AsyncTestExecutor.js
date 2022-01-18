@@ -20,56 +20,38 @@ class AsyncTestExecutor extends TestExecutor {
    * @protected
    */
   async _execTest() {
-    return new Promise(resolve => {
+    /**
+     * @type {TestCase}
+     */
+    const testCase = this._newTestCase()
 
+    if (this._runner.isVerbose()) {
+      console.log(`Test  ${this._testName}`)
+    }
 
-      const testCase = this._newTestCase()
-
-      if (this._runner.isVerbose()) {
-        console.log(`Test  ${this._testName}`)
-      }
-
-      if (this._runner.isVerbose()) {
-        console.log('\x1b[90m%s\x1b[0m', `------------------------------------
+    if (this._runner.isVerbose()) {
+      console.log('\x1b[90m%s\x1b[0m', `------------------------------------
 Setup ${this._testName} 
 `)
-      }
+    }
 
-      testCase.setUp()
-
-      try {
-        testCase[this._testName].call(testCase)
-          .then(() => {
-            this._logPass(testCase)
-            this._incrementTestPass()
-          })
-          .catch((e) => {
-            this._logError(testCase, e)
-            this._incrementTestFail()
-          })
-          .finally(() => {
-            if (this._runner.isVerbose()) {
-              console.log('\x1b[90m%s\x1b[0m', `------------------------------
-tearDown ${this._testName} 
+    testCase.setUp()
+    try {
+      await testCase[this._testName].call(testCase)
+      this._incrementTestPass()
+      this._logPass(testCase)
+    } catch (e) {
+      this._incrementTestFail()
+      this._logError(testCase, e)
+    } finally {
+      if (this._runner.isVerbose()) {
+        console.log('\x1b[90m%s\x1b[0m', `------------------------------
+tearDown ${this._testName}
 `)
-            }
-            testCase.tearDown()
-            resolve(this._report)
-          })
-      } catch (e) {
-        this._logError(testCase, e)
-        this._incrementTestFail()
-        if (this._runner.isVerbose()) {
-          console.log('\x1b[90m%s\x1b[0m', `------------------------------
-tearDown ${this._testName} 
-`)
-        }
-
-        testCase.tearDown()
-        resolve(this._report)
       }
-
-    })
+      testCase.tearDown()
+      return this._report
+    }
   }
 
 
