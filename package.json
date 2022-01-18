@@ -1,6 +1,6 @@
 {
   "name": "@flexio-oss/code-altimeter-js",
-  "version": "1.5.0-dev",
+  "version": "1.6.0-dev",
   "main": "index.js",
   "module": "index.es.js",
   "repository": "git@github.com:flexiooss/code-altimeter-js.git",
