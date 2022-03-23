@@ -3,6 +3,18 @@ const TestExecutorBuilder = require('../TestExecutor/TestExecutorBuilder')
 const TestRunReport = require('../Report/TestRunReport')
 const ReportContainer = require('../Report/ReportContainer')
 
+if (typeof window.atob === 'undefined') {
+  global.atob = (str) => {
+    return Buffer.from(str, 'base64').toString()
+  }
+}
+
+if (typeof window.btoa === 'undefined') {
+  global.btoa = (str) => {
+    return Buffer.from(str).toString('base64')
+  }
+}
+
 class TestRun {
   /**
    * @param {ReportContainer} reportContainer
