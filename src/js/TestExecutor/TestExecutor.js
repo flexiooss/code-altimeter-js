@@ -18,6 +18,8 @@ class TestExecutor {
      * @protected
      */
     this._testCase = testCase
+
+    this.__testCaseName = new testCase().constructor.name
     /**
      *
      * @params {string}
@@ -43,16 +45,14 @@ class TestExecutor {
    */
   async exec() {
     await this._execTest()
-    return new Promise(resolve => {
-      resolve(this._report)
-    })
+    return this._report
   }
 
   /**
    * @return {TestReport}
    * @protected
    */
-   async _execTest() {
+  async _execTest() {
     const testCase = this._newTestCase()
 
     if (this._runner.isVerbose()) {
@@ -91,7 +91,7 @@ tearDown ${this._testName}
    * @protected
    */
   _logPass(testCase) {
-    console.log('\x1b[92m%s\x1b[0m', `⛱   PASS ${this._testName}`)
+    console.log('\x1b[92m%s\x1b[0m', `⛱   PASS [${this.__testCaseName}]  ${this._testName}`)
   }
 
   /**
