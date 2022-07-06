@@ -1,7 +1,6 @@
 const {TEST_METHOD_PREFIX, ASYNC_TEST_METHOD_PREFIX} = require('../constantes')
 const TestCaseReport = require('../Report/TestCaseReport')
 const TestExecutor = require('./TestExecutor')
-const AsyncTestExecutor = require('./AsyncTestExecutor')
 const StaticInvoker = require('./StaticInvoker')
 
 /**
@@ -62,45 +61,27 @@ class TestCaseExecutor {
       .__runTests()
 
     this.__staticInvoker.invokeAfterClass()
-
-    return new Promise(resolve => {
-      resolve(this.__report)
-    })
+    return this.__report
   }
 
   /**
    * @return {Promise<Report[][]>}
    * @private
    */
-  __runTests() {
-    return Promise.all(
-      [
+  async __runTests() {
 
-        Promise.all(this.__testsList.map((v) => new TestExecutor(
-          this.__testCase,
-          v,
-          this.__runner
-          )
-            .exec()
-        )).then((reports) => {
-          reports.forEach(report => {
-            this.__updateReport(report)
-          })
-        })
-        ,
-        Promise.all(this.__asyncTestsList.map((v) => new AsyncTestExecutor(
-          this.__testCase,
-          v,
-          this.__runner
-          )
-            .exec()
-        )).then((reports) => {
-          reports.forEach(report => {
-            this.__updateReport(report)
-          })
-        })
-      ]
-    )
+
+    for (const test of this.__testsList) {
+      const report = await new TestExecutor(this.__testCase, test, this.__runner).exec()
+      this.__updateReport(report)
+    }
+
+    for (const test of this.__asyncTestsList) {
+      const report = await new TestExecutor(this.__testCase, test, this.__runner).exec()
+      this.__updateReport(report)
+    }
+
+    return this
   }
 
   /**

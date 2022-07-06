@@ -1,8 +1,5 @@
-const TestError = require('../runner/TestError')
-const {TEST_METHOD_PREFIX} = require('../constantes')
 const TestCaseExecutor = require('./TestCaseExecutor')
 const TestSuiteReport = require('../Report/TestSuiteReport')
-const Reporter = require('../Report/Reporter')
 
 /**
  * @implements TestExecutable
@@ -39,14 +36,13 @@ class TestSuiteExecutor {
    * @return {Promise<Report>}
    */
   async exec() {
-    this
+    await this
       .__startTestSuite()
       .__updateTestCaseCount()
       .__runAllTestCase()
-      .__finishTestSuite()
-    return new Promise(resolve => {
-      resolve(this.__report)
-    })
+
+    this.__finishTestSuite()
+    return this.__report
   }
 
   /**
@@ -64,9 +60,10 @@ class TestSuiteExecutor {
    * @return {TestSuiteExecutor}
    * @private
    */
-  __runAllTestCase() {
-    this.__testSuite.testCases.forEach((test) => {
-      const report = new TestCaseExecutor(test, this.__runner).exec()
+  async __runAllTestCase() {
+    for (const test of   this.__testSuite.testCases ){
+
+      const report = await new TestCaseExecutor(test, this.__runner).exec()
       const testCasePass = report.testFail === 0
       this.__report = this.__report
         .withTestCaseCount(this.__report.testCaseCount + 1)
@@ -75,7 +72,8 @@ class TestSuiteExecutor {
         .withTestCount(this.__report.testCount + report.testCount)
         .withTestFail(this.__report.testFail + report.testFail)
         .withTestPass(this.__report.testPass + report.testPass)
-    })
+    }
+
     return this
   }
 
