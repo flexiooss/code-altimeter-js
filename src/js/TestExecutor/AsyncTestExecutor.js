@@ -50,8 +50,8 @@ tearDown ${this._testName}
 `)
       }
       testCase.tearDown()
-      return this._report
     }
+    return this._report
   }
 
 

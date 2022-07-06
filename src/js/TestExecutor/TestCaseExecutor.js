@@ -1,6 +1,7 @@
 const {TEST_METHOD_PREFIX, ASYNC_TEST_METHOD_PREFIX} = require('../constantes')
 const TestCaseReport = require('../Report/TestCaseReport')
 const TestExecutor = require('./TestExecutor')
+const AsyncTestExecutor = require('./AsyncTestExecutor')
 const StaticInvoker = require('./StaticInvoker')
 
 /**
@@ -61,6 +62,7 @@ class TestCaseExecutor {
       .__runTests()
 
     this.__staticInvoker.invokeAfterClass()
+
     return this.__report
   }
 
@@ -70,14 +72,13 @@ class TestCaseExecutor {
    */
   async __runTests() {
 
-
     for (const test of this.__testsList) {
       const report = await new TestExecutor(this.__testCase, test, this.__runner).exec()
       this.__updateReport(report)
     }
 
     for (const test of this.__asyncTestsList) {
-      const report = await new TestExecutor(this.__testCase, test, this.__runner).exec()
+      const report = await new AsyncTestExecutor(this.__testCase, test, this.__runner).exec()
       this.__updateReport(report)
     }
 
