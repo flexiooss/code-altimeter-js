@@ -3,18 +3,6 @@ const TestExecutorBuilder = require('../TestExecutor/TestExecutorBuilder')
 const TestRunReport = require('../Report/TestRunReport')
 const ReportContainer = require('../Report/ReportContainer')
 
-if (typeof window.atob === 'undefined') {
-  global.atob = (str) => {
-    return Buffer.from(str, 'base64').toString()
-  }
-}
-
-if (typeof window.btoa === 'undefined') {
-  global.btoa = (str) => {
-    return Buffer.from(str).toString('base64')
-  }
-}
-
 class TestRun {
   /**
    * @param {ReportContainer} reportContainer
@@ -76,21 +64,14 @@ class TestRun {
    * @return {Promise<TestRun>}
    */
   async run() {
-    return new Promise(resolve => {
+    for (const testDescription of this.__testable) {
+      const report = await TestExecutorBuilder
+        .build(testDescription, this)
+        .exec()
+      this.__addReport(report)
+    }
 
-        Promise.all(this.__testable.map(async(testDescription) => {
-          return TestExecutorBuilder
-            .build(testDescription, this)
-            .exec()
-        })).then(values => {
-          values.forEach((report) => {
-            this.__addReport(report)
-          })
-
-          resolve(this)
-        })
-      }
-    )
+    return this
   }
 
   /**

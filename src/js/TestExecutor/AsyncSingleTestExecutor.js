@@ -30,9 +30,7 @@ class AsyncSingleTestExecutor extends AsyncTestExecutor{
 
     this.__staticInvoker.invokeAfterClass()
 
-    return new Promise(resolve => {
-      resolve(this._report)
-    })
+    return this._report
   }
 
 }

@@ -18,16 +18,34 @@ class TestCase {
   static executor(testCase, runner) {
     return new TestCaseExecutor(testCase, runner)
   }
-
+  /**
+   * @desc called once before TestCase
+   * @return {void}
+   * @abstract
+   */
   static beforeClass() {
   }
-
+  /**
+   * @desc called once after TestCase
+   * @return {void}
+   * @abstract
+   */
   static afterClass() {
   }
 
+  /**
+   * @desc called before all tests
+   * @return {void}
+   * @abstract
+   */
   setUp() {
   }
 
+  /**
+   * @desc called after all tests
+   * @return {void}
+   * @abstract
+   */
   tearDown() {
   }
 
@@ -37,7 +55,7 @@ class TestCase {
    */
   log(v, message=null) {
     if (this.debug) {
-      const prefix = `${new Date().toJSON()} [DEBUG] ${message !==null ? message : '' }:  `
+      const prefix = `${new Date().toJSON()} [DEBUG][${this.constructor.name}] ${message !==null ? message : '' }:  `
       if (typeof v === 'undefined') {
         console.log(`${prefix}[undefined]`)
       } else {

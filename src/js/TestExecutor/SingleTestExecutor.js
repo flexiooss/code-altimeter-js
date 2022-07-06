@@ -30,9 +30,7 @@ class SingleTestExecutor extends TestExecutor {
 
     this.__staticInvoker.invokeAfterClass()
 
-    return new Promise(resolve => {
-      resolve(this._report)
-    })
+    return this._report
   }
 }
 
