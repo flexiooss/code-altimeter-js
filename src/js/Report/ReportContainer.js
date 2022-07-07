@@ -35,7 +35,13 @@ class ReportContainer {
   }
 
   /**
-   *
+   * @return {number}
+   */
+  count() {
+    return this.__testReport.length + this.__testCaseReport.length + this.__testSuiteReport.length
+  }
+
+  /**
    * @return {TestRunReport}
    */
   get testRunReport() {
