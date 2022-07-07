@@ -64,7 +64,13 @@ class TestRun {
    * @return {Promise<TestRun>}
    */
   async run() {
+    let tests = 0
+    process.on('exit', (exitCode) => {
+      if (exitCode === 0 && tests > this.__reportContainer.count())
+        throw new TestError('Tests processing failed : the last test did not complete successfully')
+    });
     for (const testDescription of this.__testable) {
+      tests++
       const report = await TestExecutorBuilder
         .build(testDescription, this)
         .exec()
