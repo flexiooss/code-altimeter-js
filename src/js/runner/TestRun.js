@@ -2,6 +2,7 @@ const Reporter = require('../Report/Reporter')
 const TestExecutorBuilder = require('../TestExecutor/TestExecutorBuilder')
 const TestRunReport = require('../Report/TestRunReport')
 const ReportContainer = require('../Report/ReportContainer')
+const TestError = require('./TestError')
 
 class TestRun {
   /**
